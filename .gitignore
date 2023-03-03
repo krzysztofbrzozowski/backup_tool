@@ -128,3 +128,4 @@ Thumbs.db
 
 # Restricted files
 /tests_iot_api/secrets.py
+/private_file.py
