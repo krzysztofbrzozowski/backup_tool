@@ -33,11 +33,11 @@ def get_file_via_scp():
             try:
                 line = line.decode().strip()
                 if re.search(r'Transferred:.*', line):
-                    sent, transferred, time_transfer = re.findall(r'[\d+^.]+|\d+[.]\d+', line)
-                    print(sent, transferred, time_transfer)
+                    # Line looks similar: Transferred: sent 17504, received 10506872 bytes, in 13.8 seconds
+                    # Looking for data
+                    _, transferred, time_transfer = re.findall(r'[\d+^.]+|\d+[.]\d+', line)
             except Exception as e:
-                # print(e)
-                pass
+                print(e)
     proc.wait()
 
     expected_target_size = (int(transferred) - int(sent)) / (1024 * 1024)
