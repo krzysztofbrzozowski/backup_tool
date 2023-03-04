@@ -44,20 +44,20 @@ class FileManager:
         time_diff = time.time() - cls.start
         print(f'time diff = {time_diff}')
 
-        try:
-            if time_diff < 1:
-                time_diff = 1 / time_diff
+        # try:
+        #     if time_diff < 1:
+        #         time_diff = 1 / time_diff
+        #
+        # except ZeroDivisionError as e:
+        #     print(e)
 
-        except ZeroDivisionError as e:
-            print(e)
+        # try:
+        #     if chunk_diff < 1:
+        #         chunk_diff = 1 / chunk_diff
+        # except ZeroDivisionError as e:
+        #     print(e)
 
-        try:
-            if chunk_diff < 1:
-                chunk_diff = 1 / chunk_diff
-        except ZeroDivisionError as e:
-            print(e)
-
-        print(f'speed {chunk_diff / time_diff} MB/s')
+        print(f'speed {chunk_diff * (1 / time_diff)} MB/s')
 
         cls.start = time.time()
         cls.chunk = sent
@@ -66,14 +66,19 @@ class FileManager:
     def get(cls):
         with SCPClient(transport=cls.ssh.get_transport(), progress=cls.progress) as scp:
             # Start measure
+            avg_start = time.time()
             cls.start = time.time()
             cls.chunk = 0
             # Start download
             scp.get(remote_path=source, local_path=target)
 
-        # file_size = os.stat(target).st_size / (1024 * 1024)     # MB size
-        # avg_download_speed = file_size / (time.time() - start)
-        # print(f'{avg_download_speed=}MB/s')
+        file_size = os.stat(target).st_size     # MB size
+        download_time = time.time() - avg_start
+        avg_download_speed = file_size / download_time
+
+        print(f'{file_size=}MB / {download_time=}s')
+        print(f'{avg_download_speed:.2f}MB/s')
+
 
 
 if __name__ == '__main__':
