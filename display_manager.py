@@ -12,8 +12,8 @@ class DisplayManager:
         progress = float(sent) / float(size) * 100
         print(f'file: {filename.decode()} progress: {progress:.2f}%')
 
-        # TODO Estimate transfer speed during download not after
-        # print(f'MB total size = {size / (1024 * 1024)}')
+        # # TODO Estimate transfer speed during download not after
+        # print(f'MB total size = {size}')
         # print(f'GB total size = {size / (1024 * 1024 * 1024)}')
         #
         # print(f'MB total sent = {sent / (1024 * 1024)}')

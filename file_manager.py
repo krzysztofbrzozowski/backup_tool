@@ -58,6 +58,8 @@ class FileManager:
         avg_download_speed = target_size / (time.time() - start_time)
         print(f'{avg_download_speed:.2f}MB/s')
 
+        return target_size, avg_download_speed
+
 
 if __name__ == '__main__':
     FileManager.connect()
