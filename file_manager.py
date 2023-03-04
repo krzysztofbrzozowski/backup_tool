@@ -4,6 +4,7 @@
 @time:      03/03/2023
 @desc:      
 """
+import sys
 import time
 
 from paramiko import SSHClient
@@ -22,8 +23,25 @@ class FileManager:
     start = None
     chunk = None
     ssh = SSHClient()
-    ssh.load_system_host_keys()
-    ssh.connect(hostname=HOST, username=USER, key_filename=PKEY, passphrase=PASSPHRASE)
+
+    @classmethod
+    def connect(cls, use_pkey=True):
+        """Connect to server using private key
+        :param use_pkey:
+        :return: None if successfully connected
+        :raises: Exception if unable to connect to server
+        """
+        if use_pkey:
+            cls.ssh.load_system_host_keys()
+
+        try:
+            cls.ssh.connect(hostname=HOST, username=USER, key_filename=PKEY, passphrase=PASSPHRASE)
+        except BaseException as e:
+            sys.exit(f'Unable to connect ot the server - {e}')
+
+    @classmethod
+    def close(cls):
+        cls.ssh.close()
 
     # Define progress callback that prints the current percentage completed for the file
     @classmethod
@@ -82,4 +100,5 @@ class FileManager:
 
 
 if __name__ == '__main__':
+    FileManager.connect(use_pkey=False)
     FileManager.get()
