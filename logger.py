@@ -2,13 +2,13 @@
 @author:    Krzysztof Brzozowski
 @file:      logger
 @time:      04/03/2023
-@desc:      
+@desc:      Logger configuration allows read config from *.yaml file
+            Added functionality to read out *.yaml config from sys env location
 """
 import logging.config
 import yaml
 import os
 import re
-import colorlog
 
 # Added path loader to load environment variable from in YAML file
 path_matcher = re.compile(r'.*\$\{([^}^{]+)\}.*')
