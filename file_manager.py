@@ -9,13 +9,14 @@ import time
 
 from paramiko import SSHClient
 from scp import SCPClient
+import logging
 import os
+import logger
 
 from private_file import *
 from display_manager import DisplayManager
 
-# SSH/SCP Directory Recursively
-# def ssh_scp_files(ssh_host, ssh_user, ssh_password, ssh_port, source_volume, destination_volume):
+logging.getLogger('main_logger')
 
 
 class FileManager:
@@ -30,6 +31,7 @@ class FileManager:
         :return: None if successfully connected
         :raises: Exception if unable to connect to server
         """
+        logging.info('SSH connceting')
         if use_pkey:
             cls.ssh.load_system_host_keys()
 
@@ -56,7 +58,7 @@ class FileManager:
         target_size = os.stat(target_path).st_size
         # Download speed calculated as: file size / time to download
         avg_download_speed = target_size / (time.time() - start_time)
-        print(f'{avg_download_speed:.2f}MB/s')
+        logging.info(f'{avg_download_speed:.2f}MB/s')
 
         return target_size, avg_download_speed
 

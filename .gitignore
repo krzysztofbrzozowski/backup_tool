@@ -129,3 +129,8 @@ Thumbs.db
 # Restricted files
 /tests_iot_api/secrets.py
 /private_file.py
+/logs/
+
+# Large files
+/files_golden_from_server/largefile_10M
+/files_from_server/largefile_10M

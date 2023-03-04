@@ -1,0 +1,36 @@
+version: 1
+
+formatters:
+  console:
+    class: colorlog.ColoredFormatter
+    format: '%(log_color)s %(levelname)-8s %(asctime)s.%(msecs)03d | %(message)s (%(filename)s:%(lineno)s)'
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
+  file:
+    format: '%(levelname)-8s %(asctime)s.%(msecs)03d | %(message)s (%(filename)s:%(lineno)s)'
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: console
+    stream: ext://sys.stdout
+
+  file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: file
+    filename: ${BACKUP_TOOL_DIR}/logs/debug.log
+    maxBytes: 2097152 # 2MB = 2 * 1024 * 1024
+    backupCount: 10
+
+loggers:
+  sampleLogger:
+    level: DEBUG
+    handlers: [console, file_handler]
+    propagate: yes
+
+root:
+  level: DEBUG
+  handlers: [console, file_handler]
