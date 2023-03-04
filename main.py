@@ -23,13 +23,16 @@ def progress(filename, size, sent):
     print(f'{filename} progress: {progress:.2f}%')
 
 
-ssh = SSHClient()
-ssh.load_system_host_keys()
-ssh.connect(hostname=HOST, username=USER, key_filename=PKEY, passphrase=PASSPHRASE)
+class FileManager:
+    ssh = SSHClient()
+    ssh.load_system_host_keys()
+    ssh.connect(hostname=HOST, username=USER, key_filename=PKEY, passphrase=PASSPHRASE)
 
-with SCPClient(transport=ssh.get_transport(), progress=progress) as scp:
-    scp.get(remote_path=source, local_path=target)
+    @classmethod
+    def get(cls):
+        with SCPClient(transport=cls.ssh.get_transport(), progress=progress) as scp:
+            scp.get(remote_path=source, local_path=target)
 
 
 if __name__ == '__main__':
-    pass
+    FileManager.get()
