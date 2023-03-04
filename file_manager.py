@@ -11,6 +11,7 @@ from paramiko import SSHClient
 from scp import SCPClient
 import logging
 import os
+import yaml
 import logger
 
 from private_file import *
@@ -26,7 +27,7 @@ class FileManager:
 
     @classmethod
     def connect(cls, use_pkey=True):
-        """Connect to server using private key
+        """Connect to server via SSH using private key
         :param use_pkey:
         :return: None if successfully connected
         :raises: Exception if unable to connect to server
@@ -42,6 +43,7 @@ class FileManager:
 
     @classmethod
     def close(cls):
+        """Close SSH connection"""
         cls.ssh.close()
 
     @classmethod
@@ -52,7 +54,7 @@ class FileManager:
             # cls.start = time.time()
             # cls.chunk = 0
             # Start download
-            scp.get(remote_path=source_path, local_path=target_path)
+            scp.get(recursive=True, remote_path=source_path, local_path=target_path)
 
         # MB size by default on OSX
         target_size = os.stat(target_path).st_size
@@ -62,7 +64,15 @@ class FileManager:
 
         return target_size, avg_download_speed
 
+    @classmethod
+    def run_backups(cls):
+        pass
+
 
 if __name__ == '__main__':
     FileManager.connect()
-    FileManager.get(source_path=SOURCE, target_path=TARGET_DIR)
+    with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source.yaml'), 'r') as file:
+        backup_paths = yaml.safe_load(file)
+
+        for source in backup_paths['backup_source']:
+            FileManager.get(source_path=source, target_path=TARGET_DIR)

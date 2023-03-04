@@ -35,7 +35,7 @@ def get_file_via_scp():
                 if re.search(r'Transferred:.*', line):
                     # Line looks similar: Transferred: sent 17504, received 10506872 bytes, in 13.8 seconds
                     # Looking for data
-                    _, transferred, time_transfer = re.findall(r'[\d+^.]+|\d+[.]\d+', line)
+                    sent, transferred, time_transfer = re.findall(r'[\d+^.]+|\d+[.]\d+', line)
             except Exception as e:
                 print(e)
     proc.wait()
