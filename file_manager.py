@@ -63,4 +63,4 @@ class FileManager:
 
 if __name__ == '__main__':
     FileManager.connect()
-    FileManager.get(source_path=SOURCE, target_path=TARGET)
+    FileManager.get(source_path=SOURCE, target_path=TARGET_DIR)
