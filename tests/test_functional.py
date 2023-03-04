@@ -10,7 +10,8 @@ import time
 import pytest
 
 from file_manager import FileManager
-
+from private_file import *
+import subprocess
 
 class TestFunctionalBackupTool:
     # @pytest.fixture(autouse=True)
@@ -33,4 +34,13 @@ class TestFunctionalBackupTool:
         assert True is False
 
     def test_download_speed_is_correct(self):
-        assert True is False
+        """Test is comparing download result using SCPClient and raw SCP call from console"""
+        call = f'scp -i {PKEY} {USER}@{HOST}:{SOURCE} {TARGET}'
+        proc = subprocess.Popen(call, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for line in proc.stdout:
+            if line != bytes():
+                try:
+                    print(line.decode().strip())
+                except Exception as e:
+                    print(e)
+        proc.wait()

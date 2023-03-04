@@ -12,9 +12,8 @@ from scp import SCPClient
 import os
 
 from private_file import *
+from display_manager import DisplayManager
 
-source = SOURCE
-target = TARGET
 # SSH/SCP Directory Recursively
 # def ssh_scp_files(ssh_host, ssh_user, ssh_password, ssh_port, source_volume, destination_volume):
 
@@ -43,62 +42,23 @@ class FileManager:
     def close(cls):
         cls.ssh.close()
 
-    # Define progress callback that prints the current percentage completed for the file
     @classmethod
-    def progress(cls, filename, size, sent):
-        progress = float(sent) / float(size) * 100
-        print(f'{filename} progress: {progress:.2f}%')
-
-        print(f'MB total size = {size / (1024 * 1024)}')
-        print(f'GB total size = {size / (1024 * 1024 * 1024)}')
-
-        print(f'MB total sent = {sent / (1024 * 1024)}')
-        print(f'GB total sent = {sent / (1024 * 1024 * 1024)}')
-
-        chunk_diff = sent - cls.chunk
-        chunk_diff = chunk_diff / (1024 * 1024)             # MB size
-        print(f'chunk diff MB = {chunk_diff}')
-
-        time_diff = time.time() - cls.start
-        print(f'time diff = {time_diff}')
-
-        # try:
-        #     if time_diff < 1:
-        #         time_diff = 1 / time_diff
-        #
-        # except ZeroDivisionError as e:
-        #     print(e)
-
-        # try:
-        #     if chunk_diff < 1:
-        #         chunk_diff = 1 / chunk_diff
-        # except ZeroDivisionError as e:
-        #     print(e)
-
-        print(f'speed {chunk_diff * (1 / time_diff)} MB/s')
-
-        cls.start = time.time()
-        cls.chunk = sent
-
-    @classmethod
-    def get(cls):
-        with SCPClient(transport=cls.ssh.get_transport(), progress=cls.progress) as scp:
+    def get(cls, source_path: str, target_path: str):
+        with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
             # Start measure
-            avg_start = time.time()
-            cls.start = time.time()
-            cls.chunk = 0
+            start_time = time.time()
+            # cls.start = time.time()
+            # cls.chunk = 0
             # Start download
-            scp.get(remote_path=source, local_path=target)
+            scp.get(remote_path=source_path, local_path=target_path)
 
-        file_size = os.stat(target).st_size     # MB size
-        download_time = time.time() - avg_start
-        avg_download_speed = file_size / download_time
-
-        print(f'{file_size=}MB / {download_time=}s')
+        # MB size by default on OSX
+        target_size = os.stat(target_path).st_size
+        # Download speed calculated as: file size / time to download
+        avg_download_speed = target_size / (time.time() - start_time)
         print(f'{avg_download_speed:.2f}MB/s')
 
 
-
 if __name__ == '__main__':
-    FileManager.connect(use_pkey=False)
-    FileManager.get()
+    FileManager.connect()
+    FileManager.get(source_path=SOURCE, target_path=TARGET)
