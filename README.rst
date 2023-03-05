@@ -31,7 +31,7 @@ Project description
 
 TODO
 ----
-~~Select files from YAML~~
+~Select files from YAML~
 
 
 .. role:: strike
