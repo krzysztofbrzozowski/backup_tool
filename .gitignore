@@ -130,6 +130,8 @@ Thumbs.db
 /tests_iot_api/secrets.py
 /private_file.py
 /logs/
+/config/config_backup_tool_private.yaml
+
 
 # Large files
 /files_golden_from_server/largefile_10M

@@ -51,6 +51,7 @@ class TestFunctionalBackupTool:
     @pytest.fixture(autouse=True)
     def setup_method(self):
         # TODO clean up whole folder before test!
+        # TODO select PC name as test user!
         pass
 
     # @pytest.fixture(autouse=True)
@@ -84,7 +85,6 @@ class TestFunctionalBackupTool:
 
         # Tested method
         target_size, download_speed = FileManager.get(source_path=SOURCE, target_path=TARGET_DIR)
-
         assert expected_download_speed == download_speed
 
 
