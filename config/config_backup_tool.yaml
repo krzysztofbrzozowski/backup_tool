@@ -1,0 +1,15 @@
+your_pc_name:
+  # BACKUP TARGET
+  BACKUP_DIR: your_backup_dir
+
+  # SERVER DETAILS
+  HOST:       your_remote_host
+  USER:       your_remote_user
+
+  # PRIVATE KEY DETAILS
+  PKEY:       your_private_key
+  PASSPHRASE: your_private_key_passphrase
+
+TEST_USER:
+  # BACKUP TARGET
+  BACKUP_DIR: None
