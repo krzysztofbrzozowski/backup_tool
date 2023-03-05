@@ -31,10 +31,6 @@ Project description
 
 TODO
 ----
-~Select files from YAML~
-
-
-.. role:: strike
-    :class: strike
-
-:strike:`This text is crossed out`
+* Import directories to backup form YAML
+* Create tar or zip after download
+* Put all the settings in YAML config
