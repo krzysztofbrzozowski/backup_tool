@@ -64,9 +64,9 @@ class FileManager:
             # Start download
             scp.get(recursive=recursive, remote_path=source_path, local_path=target_path)
 
-        # MB size by default on OSX
-        directory = Path(Config.get_config_value('TEST_FILE_TARGET_SCP'))
-        target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
+        # Calculate file size for folder
+        target = Path(target_path)
+        target_size = sum(f.stat().st_size for f in target.glob('**/*') if f.is_file())
         # Download speed calculated as: file size / time to download
         avg_download_speed = (target_size / (1024 * 1024)) / (time.time() - start_time)
         logging.info(f'{avg_download_speed:.2f}MB/s')

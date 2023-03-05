@@ -15,7 +15,7 @@ from file_manager import FileManager
 from config_manager import ConfigManager as Config
 
 
-def get_file_via_scp(source: str = None, target: str = None):
+def get_file_via_scp(source: str = None, target: str = None, recursive: bool = False):
     """Call downloading file via SCP using subprocess
 
     :return:
@@ -29,7 +29,7 @@ def get_file_via_scp(source: str = None, target: str = None):
 
     # Manual call of scp and getting file size and speed
     # Call 'scp -v -i <pkey> <user>@<host>:<source_file> <target_file>'
-    call_args = f"scp -v -i {Config.get_config_value('PKEY')} " \
+    call_args = f"scp -v {'-r' if recursive else ''} -i {Config.get_config_value('PKEY')} " \
                 f"{Config.get_config_value('USER')}@{Config.get_config_value('HOST')}:{source} {target}"
 
     proc = subprocess.Popen(call_args, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -74,16 +74,28 @@ class TestFunctionalBackupTool:
     def test_downloaded_file_is_correct(self):
         from pathlib import Path
         source = Config.get_config_value('TEST_FILE_SOURCE')
-
         # Verify size of whole folder
         # Not needed return values since comparison works on folder/file level base
-        get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'))
+        get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'), recursive=False)
 
         directory = Path(Config.get_config_value('TEST_FILE_TARGET_SCP'))
         expected_target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
-
         # Tested method
-        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
+        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'), recursive=False)
+
+        assert expected_target_size == target_size
+
+    def test_downloaded_directory_is_correct(self):
+        from pathlib import Path
+        source = Config.get_config_value('TEST_DIR_SOURCE')
+        # Verify size of whole folder
+        # Not needed return values since comparison works on folder/file level base
+        get_file_via_scp(source=source, target=Config.get_config_value('TEST_DIR_TARGET_SCP'), recursive=True)
+
+        directory = Path(Config.get_config_value('TEST_DIR_TARGET_SCP'))
+        expected_target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
+        # Tested method
+        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_DIR_TARGET_API'), recursive=True)
 
         assert expected_target_size == target_size
 
