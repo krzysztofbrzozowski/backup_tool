@@ -47,14 +47,14 @@ class FileManager:
         cls.ssh.close()
 
     @classmethod
-    def get(cls, source_path: str, target_path: str):
+    def get(cls, source_path: str, target_path: str, recursive=False):
         with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
             # Start measure
             start_time = time.time()
             # cls.start = time.time()
             # cls.chunk = 0
             # Start download
-            scp.get(recursive=True, remote_path=source_path, local_path=target_path)
+            scp.get(recursive=recursive, remote_path=source_path, local_path=target_path)
 
         # MB size by default on OSX
         target_size = os.stat(target_path).st_size
@@ -65,14 +65,8 @@ class FileManager:
         return target_size, avg_download_speed
 
     @classmethod
-    def run_backups(cls):
-        pass
+    def get_backup_positions(cls):
+        with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source.yaml'), 'r') as file:
+            backup_paths = yaml.safe_load(file)
 
-
-if __name__ == '__main__':
-    FileManager.connect()
-    with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source.yaml'), 'r') as file:
-        backup_paths = yaml.safe_load(file)
-
-        for source in backup_paths['backup_source']:
-            FileManager.get(source_path=source, target_path=TARGET_DIR)
+        return backup_paths['backup_source']
