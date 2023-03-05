@@ -14,7 +14,8 @@ System requirements for for project:
 
 Project description
 ====
-.. code-block:: python
+.. code-block:: python3
+
     if __name__ == '__main__':
     # Connect via SSH
     FileManager.connect()
@@ -26,3 +27,4 @@ Project description
     # TODO Write it better (add it to one fucntion)
     for source in sources:
         FileManager.get(source_path=source, target_path=TARGET_DIR, recursive=True)
+
