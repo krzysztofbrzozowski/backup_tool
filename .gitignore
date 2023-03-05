@@ -134,5 +134,4 @@ Thumbs.db
 
 
 # Large files
-/files_golden_from_server/largefile_10M
-/files_from_server.nosync/
+/backup.nosync/

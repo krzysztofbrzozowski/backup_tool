@@ -13,6 +13,7 @@ import logging
 import os
 import yaml
 import logger
+from pathlib import Path
 
 from display_manager import DisplayManager
 from config_manager import ConfigManager as Config
@@ -61,12 +62,13 @@ class FileManager:
             # cls.start = time.time()
             # cls.chunk = 0
             # Start download
-            scp.get(recursive=recursive, remote_path=source_path, local_path=Config.get_config_value('BACKUP_DIR'))
+            scp.get(recursive=recursive, remote_path=source_path, local_path=target_path)
 
         # MB size by default on OSX
-        target_size = os.stat(target_path).st_size
+        directory = Path(Config.get_config_value('TEST_FILE_TARGET_SCP'))
+        target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
         # Download speed calculated as: file size / time to download
-        avg_download_speed = target_size / (time.time() - start_time)
+        avg_download_speed = (target_size / (1024 * 1024)) / (time.time() - start_time)
         logging.info(f'{avg_download_speed:.2f}MB/s')
 
         return target_size, avg_download_speed
