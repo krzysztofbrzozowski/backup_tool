@@ -11,6 +11,7 @@ import pytest
 
 from file_manager import FileManager
 from private_file import *
+from config_manager import *
 
 
 def get_file_via_scp():
@@ -51,8 +52,7 @@ class TestFunctionalBackupTool:
     @pytest.fixture(autouse=True)
     def setup_method(self):
         # TODO clean up whole folder before test!
-        # TODO select PC name as test user!
-        pass
+        ConfigManager.test_mode = True
 
     # @pytest.fixture(autouse=True)
     # def teardown_method(self):

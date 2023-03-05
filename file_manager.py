@@ -14,8 +14,8 @@ import os
 import yaml
 import logger
 
-from private_file import *
 from display_manager import DisplayManager
+from config_manager import ConfigManager as Config
 
 logging.getLogger('main_logger')
 
@@ -29,15 +29,22 @@ class FileManager:
     def connect(cls, use_pkey=True):
         """Connect to server via SSH using private key
         :param use_pkey:
-        :return: None if successfully connected
-        :raises: Exception if unable to connect to server
+            If selected, will load local private keys form folder
+        :return:
+            None if successfully connected
+        :raises:
+            Exception if unable to connect to server
         """
         logging.info('SSH connceting')
         if use_pkey:
             cls.ssh.load_system_host_keys()
 
         try:
-            cls.ssh.connect(hostname=HOST, username=USER, key_filename=PKEY, passphrase=PASSPHRASE)
+            cls.ssh.connect(
+                hostname=Config.get_config_value('HOST'),
+                username=Config.get_config_value('USER'),
+                key_filename=Config.get_config_value('PKEY'),
+                passphrase=Config.get_config_value('PASSPHRASE'))
         except BaseException as e:
             sys.exit(f'Unable to connect ot the server - {e}')
 
@@ -54,7 +61,7 @@ class FileManager:
             # cls.start = time.time()
             # cls.chunk = 0
             # Start download
-            scp.get(recursive=recursive, remote_path=source_path, local_path=target_path)
+            scp.get(recursive=recursive, remote_path=source_path, local_path=Config.get_config_value('BACKUP_DIR'))
 
         # MB size by default on OSX
         target_size = os.stat(target_path).st_size
@@ -68,5 +75,4 @@ class FileManager:
     def get_backup_positions(cls):
         with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source.yaml'), 'r') as file:
             backup_paths = yaml.safe_load(file)
-
         return backup_paths['backup_source']

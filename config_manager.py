@@ -11,21 +11,28 @@ import os
 
 
 class ConfigManager:
+    # If test_mode selected it will take TEST_USER config from the YAML
+    test_mode = False
     self_name = platform.node()
     # Change this line if needed
     config_path = os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'config_backup_tool_private.yaml')
 
     @classmethod
-    def get_config(cls, test_mode: bool = False):
+    def get_config(cls):
+        """Reads YAML config form selected file
+        :return:
+            Return read config with automatically chosen user
+        """
         with open(cls.config_path, 'r') as file:
             config = yaml.safe_load(file)
 
-        if test_mode:
+        if cls.test_mode:
             return config['TEST_USER']
         return config[cls.self_name]
 
     @classmethod
     def get_config_value(cls, config_key: str = None):
+
         try:
             return cls.get_config()[config_key]
         except KeyError as e:
