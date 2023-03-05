@@ -31,3 +31,10 @@ Project description
 
 TODO
 ----
+~~Select files from YAML~~
+
+
+.. role:: strike
+    :class: strike
+
+:strike:`This text is crossed out`
