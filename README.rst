@@ -31,6 +31,9 @@ Project description
 
 TODO
 ----
-* Import directories to backup form YAML
+* [X] Import directories to backup form YAML
 * Create tar or zip after download
-* Put all the settings in YAML config
+* [X] Put all the settings in YAML config
+* [X] Use different logger in tests than in regular call -> switched off logging as tem solution
+* Create put method
+* Test put method

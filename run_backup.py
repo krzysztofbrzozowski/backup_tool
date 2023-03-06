@@ -5,7 +5,9 @@
 @desc:      
 """
 from file_manager import *
-from private_file import *
+import logger
+
+logging.getLogger('main')
 
 if __name__ == '__main__':
     # Connect via SSH

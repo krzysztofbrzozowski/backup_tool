@@ -12,13 +12,10 @@ from scp import SCPClient
 import logging
 import os
 import yaml
-import logger
 from pathlib import Path
 
 from display_manager import DisplayManager
 from config_manager import ConfigManager as Config
-
-logging.getLogger('main_logger')
 
 
 class FileManager:
@@ -56,6 +53,12 @@ class FileManager:
 
     @classmethod
     def get(cls, source_path: str, target_path: str, recursive=False):
+        """Download file from server
+        :param source_path:
+        :param target_path:
+        :param recursive:
+        :return:
+        """
         with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
             # Start measure
             start_time = time.time()
@@ -72,6 +75,20 @@ class FileManager:
         logging.info(f'{avg_download_speed:.2f}MB/s')
 
         return target_size, avg_download_speed
+
+    @classmethod
+    def put(cls, source_path: str, target_path: str, recursive=False):
+        """Upload file or files to remote path
+        :param source_path:
+        :param target_path:
+        :param recursive:
+        :return:
+        """
+        with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
+            # Start measure
+            start_time = time.time()
+            # Start upload
+            scp.put(recursive=recursive, remote_path=target_path, files=source_path)
 
     @classmethod
     def get_backup_positions(cls):

@@ -56,8 +56,8 @@ def get_file_via_scp(source: str = None, target: str = None, recursive: bool = F
 class TestFunctionalBackupTool:
     @pytest.fixture(autouse=True)
     def setup_method(self):
-        # TODO set up logging to info only
         # TODO clean up whole folder before test!
+        logging.disable(logging.CRITICAL)
         Config.test_mode = True
 
     # @pytest.fixture(autouse=True)
