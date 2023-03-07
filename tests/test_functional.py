@@ -9,6 +9,8 @@ import os
 import time
 
 import pytest
+from pathlib import Path
+from shutil import rmtree
 
 from file_manager import FileManager
 from command_manager import CommandManager
@@ -56,9 +58,15 @@ def get_file_via_scp(source: str = None, target: str = None, recursive: bool = F
 class TestFunctionalBackupTool:
     @pytest.fixture(autouse=True)
     def setup_method(self):
-        # TODO clean up whole folder before test!
         logging.disable(logging.CRITICAL)
         Config.test_mode = True
+
+        # Clear all downloaded data
+        for c_path in Config.get_config_values(
+                ['TEST_FILE_TARGET_SCP', 'TEST_FILE_TARGET_API', 'TEST_DIR_TARGET_SCP', 'TEST_DIR_TARGET_API']):
+            for path in Path(c_path).glob("**/*"):
+                if path.is_file(): path.unlink()
+                elif path.is_dir(): rmtree(path)
 
     # TODO if this test is second one Fails, why?
     def test_connection_raises_exception_if_key_not_correct(self):
@@ -72,16 +80,14 @@ class TestFunctionalBackupTool:
 
     def test_downloaded_file_size_is_correct(self):
         """Verifying downloaded file have correct size"""
-        from pathlib import Path
-
         source = Config.get_config_value('TEST_FILE_SOURCE')
 
-        # Verify size of whole folder
         # Not needed return values since comparison works on folder/file level base
         get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'), recursive=False)
 
-        directory = Path(Config.get_config_value('TEST_FILE_TARGET_SCP'))
-        expected_target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
+        test_target_file = Path(Config.get_config_value('TEST_FILE_TARGET_SCP'))
+        expected_target_size = os.stat(test_target_file).st_size
+
         # Tested method
         target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'), recursive=False)
 
@@ -89,8 +95,6 @@ class TestFunctionalBackupTool:
 
     def test_downloaded_directory_size_is_correct(self):
         """Verifying downloaded files (recursive) have correct size"""
-        from pathlib import Path
-
         source = Config.get_config_value('TEST_DIR_SOURCE')
 
         # Verify size of whole folder
@@ -99,6 +103,7 @@ class TestFunctionalBackupTool:
 
         directory = Path(Config.get_config_value('TEST_DIR_TARGET_SCP'))
         expected_target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
+
         # Tested method
         target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_DIR_TARGET_API'), recursive=True)
 

@@ -4,6 +4,7 @@
 @time:      05/03/2023
 @desc:      Deliver paths per setting written in config
 """
+from typing import List
 import logging
 import platform
 import yaml
@@ -32,9 +33,17 @@ class ConfigManager:
 
     @classmethod
     def get_config_value(cls, config_key: str = None):
-
+        """Reads YAML config with selected key"""
         try:
             return cls.get_config()[config_key]
+        except KeyError as e:
+            logging.error(e)
+
+    @classmethod
+    def get_config_values(cls, config_keys: List[str] = None):
+        """Reads YAML config with selected key"""
+        try:
+            return [cls.get_config()[config_key] for config_key in config_keys]
         except KeyError as e:
             logging.error(e)
 
