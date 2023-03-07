@@ -11,7 +11,7 @@ import time
 import pytest
 
 from file_manager import FileManager
-# from private_file import *
+from command_manager import CommandManager
 from config_manager import ConfigManager as Config
 
 
@@ -25,7 +25,7 @@ def get_file_via_scp(source: str = None, target: str = None, recursive: bool = F
     import subprocess
     import re
 
-    FileManager.connect()
+    CommandManager.connect()
 
     # Manual call of scp and getting file size and speed
     # Call 'scp -v -i <pkey> <user>@<host>:<source_file> <target_file>'
@@ -60,21 +60,22 @@ class TestFunctionalBackupTool:
         logging.disable(logging.CRITICAL)
         Config.test_mode = True
 
-    # @pytest.fixture(autouse=True)
-    # def teardown_method(self):
-    #     FileManager.close()
-
     # TODO if this test is second one Fails, why?
     def test_connection_raises_exception_if_key_not_correct(self):
+        """Verifying raising exception if unable to SSH connect"""
         with pytest.raises(BaseException):
-            FileManager.connect(use_pkey=False)
+            CommandManager.connect(use_pkey=False)
 
     def test_login_via_ssh_possible(self):
-        assert FileManager.connect(use_pkey=True) is None
+        """Verifying possibility of SSH connection"""
+        assert CommandManager.connect(use_pkey=True) is None
 
-    def test_downloaded_file_is_correct(self):
+    def test_downloaded_file_size_is_correct(self):
+        """Verifying downloaded file have correct size"""
         from pathlib import Path
+
         source = Config.get_config_value('TEST_FILE_SOURCE')
+
         # Verify size of whole folder
         # Not needed return values since comparison works on folder/file level base
         get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'), recursive=False)
@@ -86,9 +87,12 @@ class TestFunctionalBackupTool:
 
         assert expected_target_size == target_size
 
-    def test_downloaded_directory_is_correct(self):
+    def test_downloaded_directory_size_is_correct(self):
+        """Verifying downloaded files (recursive) have correct size"""
         from pathlib import Path
+
         source = Config.get_config_value('TEST_DIR_SOURCE')
+
         # Verify size of whole folder
         # Not needed return values since comparison works on folder/file level base
         get_file_via_scp(source=source, target=Config.get_config_value('TEST_DIR_TARGET_SCP'), recursive=True)
@@ -101,7 +105,7 @@ class TestFunctionalBackupTool:
         assert expected_target_size == target_size
 
     def test_download_speed_is_correct(self):
-        """Test is comparing download result using SCPClient and raw SCP call from console"""
+        """Comparing downloading speed using SCPClient and raw SCP call from console"""
         # Manual call of scp and getting file size and speed
         source = Config.get_config_value('TEST_FILE_SOURCE')
 
@@ -109,6 +113,7 @@ class TestFunctionalBackupTool:
 
         # Tested method
         _, download_speed = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
+
         assert expected_download_speed == download_speed
 
 
