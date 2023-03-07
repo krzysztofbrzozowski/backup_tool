@@ -7,6 +7,11 @@ formatters:
     format: '%(log_color)s %(levelname)-8s %(asctime)s.%(msecs)03d | %(message)s (%(filename)s:%(lineno)s)'
     datefmt: "%Y-%m-%d %H:%M:%S"
 
+  console_without_file_origin:
+    class: colorlog.ColoredFormatter
+    format: '%(log_color)s %(levelname)-8s %(asctime)s.%(msecs)03d | %(message)s'
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
   file:
     format: '%(levelname)-8s %(asctime)s.%(msecs)03d | %(message)s (%(filename)s:%(lineno)s)'
     datefmt: "%Y-%m-%d %H:%M:%S"
@@ -40,12 +45,26 @@ handlers:
     maxBytes: 2097152 # 2MB = 2 * 1024 * 1024
     backupCount: 10
 
+  console_handler:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: console_without_file_origin
+      stream: ext://sys.stdout
+    #    filters: [error_filter]
+
+
 loggers:
   sampleLogger:
     level: DEBUG
     handlers: [console_debug, file_handler]
-    propagate: yes
+    propagate: no
+
+  connsole_output:
+    level: DEBUG
+    handlers: [console_handler, file_handler]
+    propagate: no
 
 root:
   level: DEBUG
   handlers: [console_debug, file_handler]
+  propagate: no

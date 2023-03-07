@@ -7,11 +7,13 @@
 import sys
 import subprocess
 import logging
+import time
 from typing import List
 
 from config_manager import ConfigManager as Config
 from paramiko import SSHClient
 
+import logger
 
 class CommandManager():
     ssh = SSHClient()
@@ -44,18 +46,40 @@ class CommandManager():
         """Close SSH connection"""
         cls.ssh.close()
 
-    # def execute_command(cls, commands: List[str]):
-    #     """
-    #     """
-    #     cls.ssh.exec_command()
-    #     # for command in commands:
-    #     #     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    #     #
-    #     #     for line in proc.stdout:
-    #     #         if line != bytes():
-    #     #             try:
-    #     #                 line = line.decode().strip()
-    #     #                 logging.info(f'{command=} {line=}')
-    #     #             except Exception as e:
-    #     #                 logging.error(f'{e}')
-    #     #     proc.wait()
+    @classmethod
+    def execute_command(cls, command: List[str]):
+        """Execute command on remote server
+        :param command:
+            List of commands to execute on remote server
+        """
+        console_logger = logging.getLogger('connsole_output')
+        # for cmd in command:
+        #     console_logger.info(f'>>> {cmd}')
+        #     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        #     for line in proc.stdout:
+        #         if line != bytes():
+        #             try:
+        #                 line = line.decode().strip()
+        #                 console_logger.info(f'{line}')
+        #             except Exception as e:
+        #                 console_logger.error(f'{e}')
+        #     proc.wait()
+
+        for cmd in command:
+            stdin, stdout, stderr = cls.ssh.exec_command(cmd)
+            stdout.channel.recv_exit_status()
+            response = stdout.readlines()
+            for line in response:
+                console_logger.debug(
+                    f"INPUT: {cmd}\n \
+                    OUTPUT: {line}"
+                )
+            # time.sleep(0.3)
+
+
+if __name__ == '__main__':
+    Config.test_mode = True
+    CommandManager.connect(use_pkey=True)
+    CommandManager.execute_command(command=[
+        f'mkdir test_remote_executing_command && cd $_; truncate -s {12}M {12}MB_largefile'
+    ])
