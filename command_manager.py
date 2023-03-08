@@ -47,12 +47,15 @@ class CommandManager():
         cls.ssh.close()
 
     @classmethod
-    def execute_command(cls, command: List[str]):
+    def execute_command(cls, command: str | List[str]):
         """Execute command on remote server
         :param command:
             List of commands to execute on remote server
         """
         console_logger = logging.getLogger('connsole_output')
+
+        if isinstance(command, str):
+            command = [command]
 
         for cmd in command:
             stdin, stdout, stderr = cls.ssh.exec_command(cmd, get_pty=True)
