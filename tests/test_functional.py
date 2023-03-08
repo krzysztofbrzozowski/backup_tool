@@ -93,7 +93,7 @@ class TestFunctionalBackupTool:
         # Tested method
         target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'), recursive=False)
 
-        assert expected_target_size == target_size
+        assert target_size == expected_target_size
 
     def test_downloaded_directory_size_is_correct(self):
         """Verifying downloaded files (recursive) have correct size"""
@@ -109,7 +109,7 @@ class TestFunctionalBackupTool:
         # Tested method
         target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_DIR_TARGET_API'), recursive=True)
 
-        assert expected_target_size == target_size
+        assert target_size == expected_target_size
 
     def test_download_speed_is_correct(self):
         """Comparing downloading speed using SCPClient and raw SCP call from console"""
@@ -121,7 +121,7 @@ class TestFunctionalBackupTool:
         # Tested method
         _, download_speed = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
 
-        assert expected_download_speed == download_speed
+        assert download_speed == expected_download_speed
 
     def test_remote_commands_execution_working(self):
         """Comparing size of remotely created file with random size after download to local disc"""
