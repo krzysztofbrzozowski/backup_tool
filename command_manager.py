@@ -53,33 +53,11 @@ class CommandManager():
             List of commands to execute on remote server
         """
         console_logger = logging.getLogger('connsole_output')
-        # for cmd in command:
-        #     console_logger.info(f'>>> {cmd}')
-        #     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        #     for line in proc.stdout:
-        #         if line != bytes():
-        #             try:
-        #                 line = line.decode().strip()
-        #                 console_logger.info(f'{line}')
-        #             except Exception as e:
-        #                 console_logger.error(f'{e}')
-        #     proc.wait()
-        # Connect
 
         for cmd in command:
-            # stdin, stdout, stderr = cls.ssh.exec_command(cmd)
-            # stdout.channel.recv_exit_status()
-            # response = stdout.readlines()
             stdin, stdout, stderr = cls.ssh.exec_command(cmd, get_pty=True)
             for line in iter(stdout.readline, ""):
                 console_logger.info(f'{cmd} -> {line}')
-
-            # for line in response:
-            #     console_logger.debug(
-            #         f"INPUT: {cmd}\n \
-            #         OUTPUT: {line}"
-            #     )
-            # time.sleep(0.3)
 
 
 if __name__ == '__main__':

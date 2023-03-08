@@ -36,8 +36,13 @@ class FileManager(CommandManager):
             start_time = time.time()
             # cls.start = time.time()
             # cls.chunk = 0
+            # Change to list if one path is provided
+            if isinstance(source_path, str):
+                source_path = [source_path]
+
             # Start download
-            scp.get(recursive=recursive, remote_path=source_path, local_path=target_path)
+            for source in source_path:
+                scp.get(recursive=recursive, remote_path=source, local_path=target_path)
 
         # Calculate file size for file or folder
         target = Path(target_path)
