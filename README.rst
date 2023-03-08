@@ -37,4 +37,5 @@ TODO
 * [X] Use different logger in tests than in regular call -> switched off logging as tem solution
 * Create put method
 * Test put method
-* Create method to remotely execute commands
+* [X] Create method to remotely execute commands
+* [X] Test remote cmd execution method
