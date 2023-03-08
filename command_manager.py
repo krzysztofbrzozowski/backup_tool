@@ -64,22 +64,35 @@ class CommandManager():
         #             except Exception as e:
         #                 console_logger.error(f'{e}')
         #     proc.wait()
+        # Connect
 
         for cmd in command:
-            stdin, stdout, stderr = cls.ssh.exec_command(cmd)
-            stdout.channel.recv_exit_status()
-            response = stdout.readlines()
-            for line in response:
-                console_logger.debug(
-                    f"INPUT: {cmd}\n \
-                    OUTPUT: {line}"
-                )
+            # stdin, stdout, stderr = cls.ssh.exec_command(cmd)
+            # stdout.channel.recv_exit_status()
+            # response = stdout.readlines()
+            stdin, stdout, stderr = cls.ssh.exec_command(cmd, get_pty=True)
+            for line in iter(stdout.readline, ""):
+                console_logger.info(f'{cmd} -> {line}')
+
+            # for line in response:
+            #     console_logger.debug(
+            #         f"INPUT: {cmd}\n \
+            #         OUTPUT: {line}"
+            #     )
             # time.sleep(0.3)
 
 
 if __name__ == '__main__':
+    logging.disable(logging.DEBUG)
+
     Config.test_mode = True
     CommandManager.connect(use_pkey=True)
+
+    expected_random_size = 3
     CommandManager.execute_command(command=[
-        f'mkdir test_remote_executing_command && cd $_; truncate -s {12}M {12}MB_largefile'
+        f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; rm -r test_remote_executing_command',
+        f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; mkdir test_remote_executing_command',
+        f'cd {Config.get_config_value("TEST_DIR_SOURCE")}/test_remote_executing_command ; truncate -s {expected_random_size}M {expected_random_size}MB_largefile'
+        f'cd {Config.get_config_value("TEST_DIR_SOURCE")}/test_remote_executing_command ; ls -al'
     ])
+
