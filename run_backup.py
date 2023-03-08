@@ -16,7 +16,5 @@ if __name__ == '__main__':
     # Get all backup sources
     sources = FileManager.get_backup_positions()
 
-    # Get every file via SCP
-    # TODO Write it better (add it to one fucntion)
-    for source in sources:
-        FileManager.get(source_path=source, target_path=TARGET_DIR, recursive=True)
+    # Get every source via SCP
+    FileManager.get(source_path=sources, target_path=TARGET_DIR, recursive=True)

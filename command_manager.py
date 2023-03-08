@@ -15,7 +15,8 @@ from paramiko import SSHClient
 
 import logger
 
-class CommandManager():
+
+class CommandManager:
     ssh = SSHClient()
 
     @classmethod
