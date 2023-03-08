@@ -30,7 +30,7 @@ class FileManager(CommandManager):
         :param recursive:
         :return:
         """
-        # TODO download a list of files
+        # TODO put that in try (if one path fail, another might be downloaded)
         with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
             # Start measure
             start_time = time.time()

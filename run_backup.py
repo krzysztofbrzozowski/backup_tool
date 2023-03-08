@@ -17,4 +17,5 @@ if __name__ == '__main__':
     sources = FileManager.get_backup_positions()
 
     # Get every source via SCP
+    # TODO Allow skipping some files e.g. venv
     FileManager.get(source_path=sources, target_path=TARGET_DIR, recursive=True)
