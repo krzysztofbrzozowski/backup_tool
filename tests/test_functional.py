@@ -78,7 +78,45 @@ class TestFunctionalBackupTool:
 
     def test_login_via_ssh_possible(self):
         """Verifying possibility of SSH connection"""
-        assert CommandManager.connect(use_pkey=True) is None
+        assert CommandManager.connect(use_pkey=False) is None
+
+    def test_remote_commands_execution_working(self):
+        """Comparing size of remotely created file with random size after download to local disc"""
+        import random
+        # Create random size of file which is also expected one after download
+        # Multiply 1024 * 1024 to get size in bytes
+        expected_random_size = random.randint(5, 10) * 1024 * 1024
+
+        CommandManager.connect(use_pkey=True)
+        # Tested method
+        CommandManager.execute_command(command=[
+            f'rm -r * ; mkdir largefiles',
+            f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; rm -r test_remote_executing_command',
+            f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; mkdir test_remote_executing_command',
+            f'cd {Config.get_config_value("TEST_DIR_SOURCE")}/test_remote_executing_command ; truncate -s {expected_random_size} {expected_random_size}B_largefile'
+        ])
+
+        # Download file via SCP
+        get_file_via_scp(
+            source=os.path.join(Config.get_config_value('TEST_DIR_SOURCE'), 'test_remote_executing_command', f'{expected_random_size}B_largefile'),
+            target=os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP')),
+            recursive=False)
+
+        random_size = os.stat(
+            os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP'), f'{expected_random_size}B_largefile')
+        ).st_size
+
+        # Prepare some data for other tests
+        # TODO it need to be replaced with better solution
+        CommandManager.execute_command(command=[
+            f'rm -r * ; mkdir largefiles',
+            f'truncate -s 10M 10M_largefile',
+            'cd largefiles ; truncate -s 5M 5M_largefile_0',
+            'cd largefiles ; truncate -s 5M 5M_largefile_1',
+            'cd largefiles ; truncate -s 5M 5M_largefile_2',
+        ])
+
+        assert random_size == expected_random_size
 
     def test_downloaded_file_size_is_correct(self):
         """Verifying downloaded file have correct size"""
@@ -122,33 +160,6 @@ class TestFunctionalBackupTool:
         _, download_speed = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
 
         assert download_speed == expected_download_speed
-
-    def test_remote_commands_execution_working(self):
-        """Comparing size of remotely created file with random size after download to local disc"""
-        import random
-        # Create random size of file which is also expected one after download
-        # Multiply 1024 * 1024 to get size in bytes
-        expected_random_size = random.randint(5, 10) * 1024 * 1024
-
-        CommandManager.connect(use_pkey=True)
-        # Tested method
-        CommandManager.execute_command(command=[
-            f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; rm -r test_remote_executing_command',
-            f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; mkdir test_remote_executing_command',
-            f'cd {Config.get_config_value("TEST_DIR_SOURCE")}/test_remote_executing_command ; truncate -s {expected_random_size} {expected_random_size}B_largefile'
-        ])
-
-        # Download file via SCP
-        get_file_via_scp(
-            source=os.path.join(Config.get_config_value('TEST_DIR_SOURCE'), 'test_remote_executing_command', f'{expected_random_size}B_largefile'),
-            target=os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP')),
-            recursive=False)
-
-        random_size = os.stat(
-            os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP'), f'{expected_random_size}B_largefile')
-        ).st_size
-
-        assert random_size == expected_random_size
 
 
 

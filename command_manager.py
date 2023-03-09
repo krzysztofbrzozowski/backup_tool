@@ -11,7 +11,7 @@ import time
 from typing import List
 
 from config_manager import ConfigManager as Config
-from paramiko import SSHClient
+from paramiko import SSHClient, AutoAddPolicy
 
 import logger
 
@@ -34,11 +34,21 @@ class CommandManager:
             cls.ssh.load_system_host_keys()
 
         try:
+            cls.ssh.set_missing_host_key_policy(AutoAddPolicy())
+            if use_pkey:
+                # Logging with private key
+                cls.ssh.connect(
+                    hostname=Config.get_config_value('HOST'),
+                    username=Config.get_config_value('USER'),
+                    key_filename=Config.get_config_value('PKEY'),
+                    passphrase=Config.get_config_value('PASSPHRASE'))
+
+            # Logging with password
             cls.ssh.connect(
                 hostname=Config.get_config_value('HOST'),
                 username=Config.get_config_value('USER'),
-                key_filename=Config.get_config_value('PKEY'),
-                passphrase=Config.get_config_value('PASSPHRASE'))
+                password=Config.get_config_value('PASSWD'))
+
         except BaseException as e:
             sys.exit(f'Unable to connect ot the server - {e}')
 
