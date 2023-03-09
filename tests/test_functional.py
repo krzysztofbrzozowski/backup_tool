@@ -6,7 +6,6 @@
 """
 import logging
 import os
-import time
 
 import pytest
 from pathlib import Path

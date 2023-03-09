@@ -1,5 +1,6 @@
 #!/bin/sh
-rm -r *
+echo ${0}
+find . -type f ! -name '*.sh' -delete
 mkdir largefiles
 truncate -s 10M 10M_largefile
 cd largefiles
