@@ -110,9 +110,11 @@ class TestFunctionalBackupTool:
         CommandManager.execute_command(command=[
             f'rm -r * ; mkdir largefiles',
             f'truncate -s 10M 10M_largefile',
-            'cd largefiles ; truncate -s 5M 5M_largefile_0',
-            'cd largefiles ; truncate -s 5M 5M_largefile_1',
-            'cd largefiles ; truncate -s 5M 5M_largefile_2',
+            f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_0")}',
+            f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_1")}',
+            f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_2")}',
+            'cd largefiles ; mkdir folder_to_skip',
+            'cd largefiles/folder_to_skip ; truncate -s 5M 5M_largefile_to_skip',
         ])
 
         assert random_size == expected_random_size
@@ -150,9 +152,8 @@ class TestFunctionalBackupTool:
 
     def test_download_speed_is_correct(self):
         """Comparing downloading speed using SCPClient and raw SCP call from console"""
-        # Manual call of scp and getting file size and speed
         source = Config.get_config_value('TEST_FILE_SOURCE')
-
+        # Manual call of scp and getting file size and speed
         _, expected_download_speed = get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'))
 
         # Tested method
@@ -160,5 +161,35 @@ class TestFunctionalBackupTool:
 
         assert download_speed == expected_download_speed
 
+    def test_skip_path_is_working_for_directory(self):
+        """Verify if in downloaded folder skip path is omitted during downloading"""
 
+        source = Config.get_config_value('TEST_DIR_SOURCE')
+
+        # Tested method with skipping paths
+        target_size, _ = FileManager.get(source_path=source,
+                                         target_path=Config.get_config_value('TEST_DIR_TARGET_API'),
+                                         skip_path=Config.get_config_values(['TEST_FILE_TO_SKIP', 'TEST_DIR_TO_SKIP']),
+                                         recursive=True)
+
+        # In test folder there are only 2 files, each 5MB, size in bytes
+        expected_file_size = 10 * 1024 * 1024
+
+        assert target_size == expected_file_size
+
+    def test_skip_path_is_working_for_file(self):
+        """Verify if in downloaded folder skip path is omitted during downloading"""
+
+        source = Config.get_config_values(['TEST_FILE_0', 'TEST_FILE_1', 'TEST_FILE_2'])
+
+        # Tested method with skipping paths
+        target_size, _ = FileManager.get(source_path=source,
+                                         target_path=Config.get_config_value('TEST_DIR_TARGET_API'),
+                                         skip_path=Config.get_config_value('TEST_FILE_1'),
+                                         recursive=False)
+
+        # In test folder there are only 2 files, each 5MB, size in bytes
+        expected_file_size = 10 * 1024 * 1024
+
+        assert target_size == expected_file_size
 

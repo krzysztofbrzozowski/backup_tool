@@ -1,3 +1,8 @@
+# Source to download
 backup_source:
   - /home/xyz
+  - /home/xyz
+
+# Skip selected files or folders
+backup_source_skip:
   - /home/xyz

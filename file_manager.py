@@ -13,6 +13,7 @@ import os
 import yaml
 from pathlib import Path
 from typing import List
+import stat
 
 from command_manager import CommandManager
 from display_manager import DisplayManager
@@ -23,26 +24,49 @@ class FileManager(CommandManager):
     chunk = None
 
     @classmethod
-    def get(cls, source_path: str | List[str], target_path: str, recursive=False):
+    def get(cls, source_path: str | List[str], target_path: str, skip_path: str | List[str] = None, recursive=False):
         """Download file from server
+        :param skip_path:
         :param source_path:
         :param target_path:
         :param recursive:
         :return:
         """
+        CommandManager.connect(use_pkey=True)
+
         # TODO put that in try (if one path fail, another might be downloaded)
         with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
+            # Init SFTP client
+            sftp = cls.ssh.open_sftp()
+
             # Start measure
             start_time = time.time()
-            # cls.start = time.time()
-            # cls.chunk = 0
+
             # Change to list if one path is provided
             if isinstance(source_path, str):
                 source_path = [source_path]
 
-            # Start download
+            # Select paths which are not marked as skipped and download
             for source in source_path:
-                scp.get(recursive=recursive, remote_path=source, local_path=target_path)
+                _lstat = sftp.lstat(source)
+                # If source is directory, get all sub dirs and files it contains
+                if stat.S_ISDIR(_lstat.st_mode):
+                    _listdir = [os.path.join(source, file_name) for file_name
+                                # Get list of all files
+                                in sftp.listdir(source)
+                                if os.path.join(source, file_name) not in skip_path]
+
+                # If source is file, verify if not in skipped path
+                else:
+                    _listdir = [source] if source not in skip_path else None
+
+                # Skip loop if empty list
+                if _listdir is None:
+                    continue
+
+                # Start download
+                for _source in _listdir:
+                    scp.get(remote_path=_source, local_path=target_path, recursive=False)
 
         # Calculate file size for file or folder
         target = Path(target_path)
