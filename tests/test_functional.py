@@ -11,6 +11,7 @@ import pytest
 from pathlib import Path
 from shutil import rmtree
 
+# Private imports
 from file_manager import FileManager
 from command_manager import CommandManager
 from config_manager import ConfigManager as Config
@@ -130,7 +131,7 @@ class TestFunctionalBackupTool:
         expected_target_size = os.stat(test_target_file).st_size
 
         # Tested method
-        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'), recursive=False)
+        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
 
         assert target_size == expected_target_size
 
@@ -146,7 +147,7 @@ class TestFunctionalBackupTool:
         expected_target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
 
         # Tested method
-        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_DIR_TARGET_API'), recursive=True)
+        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_DIR_TARGET_API'))
 
         assert target_size == expected_target_size
 
@@ -169,8 +170,7 @@ class TestFunctionalBackupTool:
         # Tested method with skipping paths
         target_size, _ = FileManager.get(source_path=source,
                                          target_path=Config.get_config_value('TEST_DIR_TARGET_API'),
-                                         skip_path=Config.get_config_values(['TEST_FILE_TO_SKIP', 'TEST_DIR_TO_SKIP']),
-                                         recursive=True)
+                                         skip_path=Config.get_config_values(['TEST_FILE_TO_SKIP', 'TEST_DIR_TO_SKIP']))
 
         # In test folder there are only 2 files, each 5MB, size in bytes
         expected_file_size = 10 * 1024 * 1024
@@ -185,8 +185,7 @@ class TestFunctionalBackupTool:
         # Tested method with skipping paths
         target_size, _ = FileManager.get(source_path=source,
                                          target_path=Config.get_config_value('TEST_DIR_TARGET_API'),
-                                         skip_path=Config.get_config_value('TEST_FILE_1'),
-                                         recursive=False)
+                                         skip_path=Config.get_config_value('TEST_FILE_1'))
 
         # In test folder there are only 2 files, each 5MB, size in bytes
         expected_file_size = 10 * 1024 * 1024

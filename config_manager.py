@@ -4,11 +4,12 @@
 @time:      05/03/2023
 @desc:      Deliver paths per setting written in config
 """
-from typing import List
 import logging
-import platform
-import yaml
 import os
+import yaml
+import platform
+
+from typing import List
 
 
 class ConfigManager:

@@ -4,25 +4,22 @@
 @time:      03/03/2023
 @desc:      
 """
-import sys
-import time
-
-from scp import SCPClient
 import logging
 import os
+import stat
+import time
 import yaml
+
 from pathlib import Path
 from typing import List
-import stat
+from scp import SCPClient
 
+# Private imports
 from command_manager import CommandManager
 from display_manager import DisplayManager
 
 
 class FileManager(CommandManager):
-    start = None
-    chunk = None
-
     @staticmethod
     def create_dir(path: Path):
         try:
@@ -32,13 +29,16 @@ class FileManager(CommandManager):
             logging.error(e)
 
     @classmethod
-    def get(cls, source_path: str | List[str], target_path: str, skip_path: str | List[str] = [], recursive=False):
-        """Download file from server
-        :param skip_path:
+    def get(cls, source_path: str | List[str], target_path: str, skip_path: str | List[str] = []):
+        """Download file or directory from server
         :param source_path:
+            Single or list of paths to download
         :param target_path:
-        :param recursive:
+            Destination path where downloaded files will be stored
+        :param skip_path:
+            Optional argument, when provided listened paths will be skipped during downloading
         :return:
+            Downloaded target size, average download speed
         """
         CommandManager.connect(use_pkey=True)
 
@@ -99,21 +99,11 @@ class FileManager(CommandManager):
         return target_size, avg_download_speed
 
     @classmethod
-    def put(cls, source_path: str, target_path: str, recursive=False):
-        """Upload file or files to remote path
-        :param source_path:
-        :param target_path:
-        :param recursive:
-        :return:
-        """
-        with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
-            # Start measure
-            start_time = time.time()
-            # Start upload
-            scp.put(recursive=recursive, remote_path=target_path, files=source_path)
-
-    @classmethod
     def get_backup_positions(cls):
+        """Reads out desired backup sources from YAML config
+        :return:
+            Paths for files/directories to download, paths to omitting files/directories
+        """
         with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source.yaml'), 'r') as file:
             backup_paths = yaml.safe_load(file)
-        return backup_paths['backup_source']
+        return backup_paths['backup_source'], backup_paths['backup_source_skip']
