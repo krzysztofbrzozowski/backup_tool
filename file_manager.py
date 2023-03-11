@@ -104,6 +104,6 @@ class FileManager(CommandManager):
         :return:
             Paths for files/directories to download, paths to omitting files/directories
         """
-        with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source.yaml'), 'r') as file:
+        with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source_private.yaml'), 'r') as file:
             backup_paths = yaml.safe_load(file)
         return backup_paths['backup_source'], backup_paths['backup_source_skip']

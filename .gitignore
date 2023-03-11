@@ -127,10 +127,9 @@ Thumbs.db
 .DS_Store
 
 # Restricted files
-/tests_iot_api/secrets.py
-/private_file.py
 /logs/
 /config/config_backup_tool_private.yaml
+/config/backup_source_private.yaml
 
 
 # Large files

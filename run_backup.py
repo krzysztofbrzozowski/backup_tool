@@ -17,4 +17,7 @@ if __name__ == '__main__':
     backup_paths, skip_paths = FileManager.get_backup_positions()
 
     # Get source files/directories via SCP
-    FileManager.get(source_path=backup_paths, target_path=TARGET_DIR, skip_path=skip_paths)
+    FileManager.get(source_path=backup_paths,
+                    target_path=TARGET_DIR,
+                    skip_path=skip_paths)
+
