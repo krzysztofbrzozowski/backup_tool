@@ -22,7 +22,7 @@ Set up environment variable with path to your local copy of backup_tool.
 
 Create virtual env and install requirements.txt
 
-Generate SSH keys and push it to your server. Set up key details in config_backup_tool.yaml.
+Generate SSH keys for test user and push it to your server. Set up key details in config_backup_tool.yaml.
 
 .. code-block:: yaml
 
@@ -86,9 +86,9 @@ Known issues:
     tests/test_functional.py::TestFunctionalBackupTool::test_connection_raises_exception_if_key_not_correct FAILED
     tests/test_functional.py::TestFunctionalBackupTool::test_download_speed_is_correct FAILED
 
-How TO USE TOOL
+HOW TO USE TOOL
 ====
-Generate SSH keys and push it to your server. Set up key details in config/config_backup_tool.yaml.
+Generate SSH keys for regular user and push it to your server. Set up key details in config/config_backup_tool.yaml.
 
 .. code-block:: yaml
 
