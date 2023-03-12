@@ -20,6 +20,9 @@ Set up environment variable with path to your local copy of backup_tool.
 
     # .zshrc
     export BACKUP_TOOL_DIR="absolute/path/to/backup_tool"
+
+.. code-block:: console
+
     source ~/.zshrc
 
 Create virtual env and install requirements.txt

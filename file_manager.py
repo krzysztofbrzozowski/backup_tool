@@ -1,6 +1,6 @@
 """
 @author:    Krzysztof Brzozowski
-@file:      main
+@file:      file_manager
 @time:      03/03/2023
 @desc:      
 """
