@@ -29,8 +29,7 @@ Project description
 
 How to use tool
 ====
-Generate SSH keys and push it to your server.
-Set up key details in config_backup_tool.yaml
+Generate SSH keys and push it to your server. Set up key details in config_backup_tool.yaml.
 
 .. code-block:: yaml
 
@@ -44,8 +43,34 @@ Set up key details in config_backup_tool.yaml
       PKEY:       your_private_key_for_test
       PASSPHRASE: your_private_key_passphrase_for_test
 
+Set up paths for test files. No need to create files manually, those will be created automatically during tests.
 
-Set up the config_backup_tool.yaml for running tests
+.. code-block:: yaml
+
+    # Backup target path (absolute)
+    BACKUP_DIR: your_test_destination
+
+    # Test paths for file download (absolute)
+    TEST_FILE_0: your_test_source/largefiles/5M_largefile_0
+    TEST_FILE_1: your_test_source/largefiles/5M_largefile_1
+    TEST_FILE_2: your_test_source/largefiles/5M_largefile_2
+
+    TEST_FILE_TARGET_SCP: your_test_destination_for/scp_call/5M_largefile_0
+    TEST_FILE_TARGET_API: your_test_destination_for/api_call/5M_largefile_0
+
+    TEST_FILE_TO_SKIP: your_test_source/largefiles/5M_largefile_1
+
+    # Test paths for recursive download (absolute)
+    TEST_DIR_SOURCE: your_test_source/largefiles
+    TEST_DIR_TARGET_SCP: your_test_destination_for/scp_call
+    TEST_DIR_TARGET_API: your_test_destination_for/api_call
+
+    TEST_DIR_TO_SKIP: your_test_source/largefiles/folder_to_skip
+
+Run the tests
+.. code-block:: console
+
+    pytest -v tests/test_functional.py
 
 
 TODO
