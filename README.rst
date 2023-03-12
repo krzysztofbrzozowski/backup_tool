@@ -72,6 +72,18 @@ Run the tests
 
     pytest -v tests/test_functional.py
 
+KNOWN ISSUES:
+.. code-block:: console
+
+    tests/test_functional.py::TestFunctionalBackupTool::test_connection_raises_exception_if_key_not_correct FAILED                                                          [ 12%]
+    tests/test_functional.py::TestFunctionalBackupTool::test_login_via_ssh_possible PASSED                                                                                  [ 25%]
+    tests/test_functional.py::TestFunctionalBackupTool::test_remote_commands_execution_working PASSED                                                                       [ 37%]
+    tests/test_functional.py::TestFunctionalBackupTool::test_downloaded_file_size_is_correct PASSED                                                                         [ 50%]
+    tests/test_functional.py::TestFunctionalBackupTool::test_downloaded_directory_size_is_correct PASSED                                                                    [ 62%]
+    tests/test_functional.py::TestFunctionalBackupTool::test_download_speed_is_correct FAILED                                                                               [ 75%]
+    tests/test_functional.py::TestFunctionalBackupTool::test_skip_path_is_working_for_directory PASSED                                                                      [ 87%]
+    tests/test_functional.py::TestFunctionalBackupTool::test_skip_path_is_working_for_file PASSED                                                                           [100%]
+
 
 TODO
 ----
