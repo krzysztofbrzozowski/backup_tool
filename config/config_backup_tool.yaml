@@ -10,9 +10,10 @@ your_pc_name:
   PKEY:       your_private_key
   PASSPHRASE: your_private_key_passphrase
 
+# Test user for running tests
 TEST_USER:
-  # BACKUP TARGET
-  BACKUP_DIR:           your_test_destination
+  # Backup target path (absolute)
+  BACKUP_DIR:  your_test_destination
 
   # Test paths for file download (absolute)
   TEST_FILE_0: your_test_source/largefiles/5M_largefile_0
@@ -31,12 +32,10 @@ TEST_USER:
 
   TEST_DIR_TO_SKIP:     your_test_source/largefiles/folder_to_skip
 
-  # SERVER DETAILS
+  # Server details
   HOST:       your_remote_test_host
   USER:       your_remote_test_user
 
-  PASSWD:     your_remote_test_password
-
-  # PRIVATE KEY DETAILS
+  # Private key details
   PKEY:       your_private_key_for_test
   PASSPHRASE: your_private_key_passphrase_for_test
