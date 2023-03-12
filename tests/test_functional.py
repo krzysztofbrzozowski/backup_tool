@@ -109,8 +109,8 @@ class TestFunctionalBackupTool:
         # Prepare some data for other tests
         # TODO it need to be replaced with better solution
         CommandManager.execute_command(command=[
-            f'rm -r * ; mkdir largefiles',
-            f'truncate -s 10M 10M_largefile',
+            f'rm -r largefiles ; mkdir largefiles',
+            f'cd largefiles ; rm -r *',
             f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_0")}',
             f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_1")}',
             f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_2")}',
