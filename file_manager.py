@@ -17,6 +17,7 @@ from scp import SCPClient
 # Private imports
 from command_manager import CommandManager
 from display_manager import DisplayManager
+from config_manager import ConfigManager
 
 
 class FileManager(CommandManager):
@@ -29,17 +30,21 @@ class FileManager(CommandManager):
             logging.error(e)
 
     @classmethod
-    def get(cls, source_path: str | List[str], target_path: str, skip_path: str | List[str] = []):
+    def get(cls, source_path: str | List[str] = None, target_path: str = None, skip_path: str | List[str] = []):
         """Download file or directory from server
         :param source_path:
             Single or list of paths to download
         :param target_path:
             Destination path where downloaded files will be stored
+            If not provided, it will select path from YAML config
         :param skip_path:
             Optional argument, when provided listened paths will be skipped during downloading
         :return:
             Downloaded target size, average download speed
         """
+        if not target_path:
+            target_path = ConfigManager.get_config_value('BACKUP_DIR')
+
         CommandManager.connect(use_pkey=True)
 
         with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
