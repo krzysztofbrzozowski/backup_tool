@@ -162,4 +162,4 @@ TODO
 * Test put method
 * [X] Create method to remotely execute commands
 * [X] Test remote cmd execution method
-* [] Prepare tar from sql db
+* [X] Prepare tar from sql db
