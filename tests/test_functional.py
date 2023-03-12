@@ -121,6 +121,11 @@ class TestFunctionalBackupTool:
 
         assert random_size == expected_random_size
 
+    def test_remote_commands_execution_awaiting_for_done(self):
+        """Verify script awaits remote executing command done"""
+        # TODO write the test for awaiting execution done
+        assert True is False
+
     def test_downloaded_file_size_is_correct(self):
         """Verifying downloaded file have correct size"""
         source = Config.get_config_value('TEST_FILE_0')
