@@ -1,12 +1,12 @@
 your_pc_name:
-  # BACKUP TARGET
+  # Backup target path (absolute)
   BACKUP_DIR: your_backup_dir
 
-  # SERVER DETAILS
+  # Server details
   HOST:       your_remote_host
   USER:       your_remote_user
 
-  # PRIVATE KEY DETAILS
+  # Private key details
   PKEY:       your_private_key
   PASSPHRASE: your_private_key_passphrase
 
