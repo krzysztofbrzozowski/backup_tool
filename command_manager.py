@@ -50,7 +50,6 @@ class CommandManager:
         except BaseException as e:
             sys.exit(f'Unable to connect ot the server - {e}')
 
-
     @classmethod
     def close(cls):
         """Close SSH connection"""

@@ -26,6 +26,12 @@ Project description
         # Get source files/directories via SCP
         FileManager.get(source_path=backup_paths, target_path=TARGET_DIR, skip_path=skip_paths)
 
+
+How to use tool
+====
+Set up the config_backup_tool.yaml for running tests
+
+
 TODO
 ----
 * [X] Import directories to backup form YAML
@@ -36,3 +42,4 @@ TODO
 * Test put method
 * [X] Create method to remotely execute commands
 * [X] Test remote cmd execution method
+* [] Prepare tar from sql db

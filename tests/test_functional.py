@@ -78,7 +78,7 @@ class TestFunctionalBackupTool:
 
     def test_login_via_ssh_possible(self):
         """Verifying possibility of SSH connection"""
-        assert CommandManager.connect(use_pkey=False) is None
+        assert CommandManager.connect(use_pkey=True) is None
 
     def test_remote_commands_execution_working(self):
         """Comparing size of remotely created file with random size after download to local disc"""
@@ -122,7 +122,7 @@ class TestFunctionalBackupTool:
 
     def test_downloaded_file_size_is_correct(self):
         """Verifying downloaded file have correct size"""
-        source = Config.get_config_value('TEST_FILE_SOURCE')
+        source = Config.get_config_value('TEST_FILE_0')
 
         # Not needed return values since comparison works on folder/file level base
         get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'), recursive=False)
@@ -153,7 +153,7 @@ class TestFunctionalBackupTool:
 
     def test_download_speed_is_correct(self):
         """Comparing downloading speed using SCPClient and raw SCP call from console"""
-        source = Config.get_config_value('TEST_FILE_SOURCE')
+        source = Config.get_config_value('TEST_FILE_0')
         # Manual call of scp and getting file size and speed
         _, expected_download_speed = get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'))
 
