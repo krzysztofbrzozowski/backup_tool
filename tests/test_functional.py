@@ -90,7 +90,8 @@ class TestFunctionalBackupTool:
         CommandManager.connect(use_pkey=True)
         # Tested method
         CommandManager.execute_command(command=[
-            f'rm -r * ; mkdir largefiles',
+            f'rm -r largefiles ; mkdir largefiles',
+            f'cd largefiles ; rm -r *',
             f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; rm -r test_remote_executing_command',
             f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; mkdir test_remote_executing_command',
             f'cd {Config.get_config_value("TEST_DIR_SOURCE")}/test_remote_executing_command ; truncate -s {expected_random_size} {expected_random_size}B_largefile'
