@@ -18,9 +18,17 @@ Set up environment variable with path to your local copy of backup_tool.
 
 .. code-block:: console
 
-    $BACKUP_TOOL_DIR
+    # .zshrc
+    export BACKUP_TOOL_DIR="absolute/path/to/backup_tool"
+    source ~/.zshrc
 
 Create virtual env and install requirements.txt
+
+.. code-block:: console
+
+    virtualenv venv
+    source source venv/bin/activate
+    pip install -r requirements.txt
 
 Generate SSH keys for test user and push it to your server. Set up key details in config_backup_tool.yaml.
 
