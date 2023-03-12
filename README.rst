@@ -73,7 +73,7 @@ Run the tests
 
     pytest -v tests/test_functional.py
 
-KNOWN ISSUES:
+Current test output:
 
 .. code-block:: console
 
@@ -85,6 +85,13 @@ KNOWN ISSUES:
     tests/test_functional.py::TestFunctionalBackupTool::test_download_speed_is_correct FAILED                                                                               [ 75%]
     tests/test_functional.py::TestFunctionalBackupTool::test_skip_path_is_working_for_directory PASSED                                                                      [ 87%]
     tests/test_functional.py::TestFunctionalBackupTool::test_skip_path_is_working_for_file PASSED                                                                           [100%]
+
+Known issues:
+
+.. code-block:: console
+
+    tests/test_functional.py::TestFunctionalBackupTool::test_connection_raises_exception_if_key_not_correct FAILED
+    tests/test_functional.py::TestFunctionalBackupTool::test_download_speed_is_correct FAILED
 
 
 TODO
