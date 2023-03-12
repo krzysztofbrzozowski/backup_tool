@@ -1,7 +1,4 @@
 your_pc_name:
-  # Backup target path (absolute)
-  BACKUP_DIR: your_backup_dir
-
   # Server details
   HOST:       your_remote_host
   USER:       your_remote_user
@@ -10,28 +7,11 @@ your_pc_name:
   PKEY:       your_private_key
   PASSPHRASE: your_private_key_passphrase
 
+  # Backup target path (absolute)
+  BACKUP_DIR: your_backup_dir
+
 # Test user for running tests
 TEST_USER:
-  # Backup target path (absolute)
-  BACKUP_DIR:  your_test_destination
-
-  # Test paths for file download (absolute)
-  TEST_FILE_0: your_test_source/largefiles/5M_largefile_0
-  TEST_FILE_1: your_test_source/largefiles/5M_largefile_1
-  TEST_FILE_2: your_test_source/largefiles/5M_largefile_2
-
-  TEST_FILE_TARGET_SCP: your_test_destination_for/scp_call/largefile_10M
-  TEST_FILE_TARGET_API: your_test_destination_for/api_call/largefile_10M
-
-  TEST_FILE_TO_SKIP: your_test_source/largefiles/5M_largefile_1
-
-  # Test paths for recursive download (absolute)
-  TEST_DIR_SOURCE:      your_test_source/largefiles
-  TEST_DIR_TARGET_SCP:  your_test_destination_for/scp_call
-  TEST_DIR_TARGET_API:  your_test_destination_for/api_call
-
-  TEST_DIR_TO_SKIP:     your_test_source/largefiles/folder_to_skip
-
   # Server details
   HOST:       your_remote_test_host
   USER:       your_remote_test_user
@@ -39,3 +19,23 @@ TEST_USER:
   # Private key details
   PKEY:       your_private_key_for_test
   PASSPHRASE: your_private_key_passphrase_for_test
+
+  # Backup target path (absolute)
+  BACKUP_DIR: your_test_destination
+
+  # Test paths for file download (absolute)
+  TEST_FILE_0: your_test_source/largefiles/5M_largefile_0
+  TEST_FILE_1: your_test_source/largefiles/5M_largefile_1
+  TEST_FILE_2: your_test_source/largefiles/5M_largefile_2
+
+  TEST_FILE_TARGET_SCP: your_test_destination_for/scp_call/5M_largefile_0
+  TEST_FILE_TARGET_API: your_test_destination_for/api_call/5M_largefile_0
+
+  TEST_FILE_TO_SKIP: your_test_source/largefiles/5M_largefile_1
+
+  # Test paths for recursive download (absolute)
+  TEST_DIR_SOURCE: your_test_source/largefiles
+  TEST_DIR_TARGET_SCP: your_test_destination_for/scp_call
+  TEST_DIR_TARGET_API: your_test_destination_for/api_call
+
+  TEST_DIR_TO_SKIP: your_test_source/largefiles/folder_to_skip
