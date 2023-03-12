@@ -12,23 +12,16 @@ System requirements for for project:
 * Possibility to use the tool via command line
 * Tests shall be written to deliver quality and reliable DevOps tool
 
-Project description
+TESTING AFTER DOWNLOAD
 ====
-.. code-block:: python
+Set up environment variable with path to your local copy of backup_tool.
 
-    if __name__ == '__main__':
-        # Connect via SSH
-        FileManager.connect()
+.. code-block:: console
 
-        # Get all backup sources
-        backup_paths, skip_paths = FileManager.get_backup_positions()
+    $BACKUP_TOOL_DIR
 
-        # Get source files/directories via SCP
-        FileManager.get(source_path=backup_paths, target_path=TARGET_DIR, skip_path=skip_paths)
+Create virtual env and install requirements.txt
 
-
-How to use tool
-====
 Generate SSH keys and push it to your server. Set up key details in config_backup_tool.yaml.
 
 .. code-block:: yaml
@@ -92,6 +85,53 @@ Known issues:
 
     tests/test_functional.py::TestFunctionalBackupTool::test_connection_raises_exception_if_key_not_correct FAILED
     tests/test_functional.py::TestFunctionalBackupTool::test_download_speed_is_correct FAILED
+
+How TO USE TOOL
+====
+Generate SSH keys and push it to your server. Set up key details in config/config_backup_tool.yaml.
+
+.. code-block:: yaml
+
+    your_pc_name:
+      # Server details
+      HOST:       your_remote_host
+      USER:       your_remote_user
+
+      # Private key details
+      PKEY:       your_private_key
+      PASSPHRASE: your_private_key_passphrase
+
+      # Backup target path (absolute)
+      BACKUP_DIR: your_backup_dir
+
+Put paths you want to backup and which one you want to skip in config/backup_source.yaml
+
+.. code-block:: yaml
+
+    # Source to download
+    backup_source:
+      - /home/xyz/some_folder_0
+      - /home/xyz/some_folder_1
+
+    # Skip selected files or folders
+    backup_source_skip:
+      - /home/xyz/some_folder_0/some_folder_to_skip
+      - /home/xyz/some_folder_1/some_folder_to_skip
+
+In Python use
+
+.. code-block:: python
+
+    if __name__ == '__main__':
+        # Connect via SSH
+        FileManager.connect()
+
+        # Get all backup sources
+        backup_paths, skip_paths = FileManager.get_backup_positions()
+
+        # Get source files/directories via SCP
+        FileManager.get(source_path=backup_paths, target_path=TARGET_DIR, skip_path=skip_paths)
+
 
 
 TODO

@@ -5,5 +5,5 @@ backup_source:
 
 # Skip selected files or folders
 backup_source_skip:
-  - /home/xyz/some_folder_0/some_filder_to_skip
-  - /home/xyz/some_folder_1/some_filder_to_skip
+  - /home/xyz/some_folder_0/some_folder_to_skip
+  - /home/xyz/some_folder_1/some_folder_to_skip
