@@ -198,3 +198,8 @@ class TestFunctionalBackupTool:
 
         assert target_size == expected_file_size
 
+    def test_compressing_downloaded_backup_working(self):
+        """Verify size before compressing and after decompression has the same size"""
+        # TODO write the test for compressing downloaded backup
+        assert True is False
+
