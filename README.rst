@@ -112,8 +112,10 @@ Generate SSH keys for regular user and push it to your server. Set up key detail
       PKEY:       your_private_key
       PASSPHRASE: your_private_key_passphrase
 
-      # Backup target path (absolute)
-      BACKUP_DIR: your_backup_dir
+      # Backup/backup compressed target path (absolute)
+      BACKUP_DIR:             your_backup_dir
+      BACKUP_DIR_COMPRESSED:  your_backup_dir_compressed
+
 
 Put paths you want to backup and which one you want to skip in config/backup_source.yaml
 
@@ -129,7 +131,12 @@ Put paths you want to backup and which one you want to skip in config/backup_sou
       - /home/xyz/some_folder_0/some_folder_to_skip
       - /home/xyz/some_folder_1/some_folder_to_skip
 
-In Python use
+Replace backup_source_private.yaml to backup_source.yaml (with your settings)
+.. code-block:: python
+
+    with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source_private.yaml'), 'r') as file:
+
+In Python you can use
 
 .. code-block:: python
 
