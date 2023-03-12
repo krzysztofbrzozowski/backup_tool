@@ -134,3 +134,4 @@ Thumbs.db
 
 # Large files
 /backup.nosync/
+/run_backup_private.py
