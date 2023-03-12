@@ -68,11 +68,13 @@ Set up paths for test files. No need to create files manually, those will be cre
     TEST_DIR_TO_SKIP: your_test_source/largefiles/folder_to_skip
 
 Run the tests
+
 .. code-block:: console
 
     pytest -v tests/test_functional.py
 
 KNOWN ISSUES:
+
 .. code-block:: console
 
     tests/test_functional.py::TestFunctionalBackupTool::test_connection_raises_exception_if_key_not_correct FAILED                                                          [ 12%]
