@@ -132,6 +132,7 @@ Put paths you want to backup and which one you want to skip in config/backup_sou
       - /home/xyz/some_folder_1/some_folder_to_skip
 
 Replace backup_source_private.yaml to backup_source.yaml (with your settings)
+
 .. code-block:: python
 
     with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source_private.yaml'), 'r') as file:
