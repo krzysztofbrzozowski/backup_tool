@@ -29,6 +29,22 @@ Project description
 
 How to use tool
 ====
+Generate SSH keys and push it to your server.
+Set up key details in config_backup_tool.yaml
+
+.. code-block:: yaml
+
+    # Test user for running tests
+    TEST_USER:
+      # Server details
+      HOST:       your_remote_test_host
+      USER:       your_remote_test_user
+
+      # Private key details
+      PKEY:       your_private_key_for_test
+      PASSPHRASE: your_private_key_passphrase_for_test
+
+
 Set up the config_backup_tool.yaml for running tests
 
 
