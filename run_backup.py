@@ -28,3 +28,6 @@ if __name__ == '__main__':
     # Get source files/directories via SCP
     FileManager.get(source_path=backup_paths, skip_path=skip_paths)
 
+    # Compress backup
+    FileManager.tar_backup()
+

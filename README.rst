@@ -150,16 +150,20 @@ In Python use
         # Get source files/directories via SCP
         FileManager.get(source_path=backup_paths, skip_path=skip_paths)
 
+        # Compress backup
+        FileManager.tar_backup()
 
 
 TODO
 ----
 * [X] Import directories to backup form YAML
-* Create tar or zip after download
+* [X] Create tar or zip after download
+* [] Test creating tar or zip after download
 * [X] Put all the settings in YAML config
 * [X] Use different logger in tests than in regular call -> switched off logging as tem solution
-* Create put method
-* Test put method
+* [] Create put method
+* [] Test put method
 * [X] Create method to remotely execute commands
 * [X] Test remote cmd execution method
 * [X] Prepare tar from sql db
+* [] Add logging to important methods/steps

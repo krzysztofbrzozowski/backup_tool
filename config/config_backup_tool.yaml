@@ -7,8 +7,9 @@ your_pc_name:
   PKEY:       your_private_key
   PASSPHRASE: your_private_key_passphrase
 
-  # Backup target path (absolute)
-  BACKUP_DIR: your_backup_dir
+  # Backup/backup compressed target path (absolute)
+  BACKUP_DIR:             your_backup_dir
+  BACKUP_DIR_COMPRESSED:  your_backup_dir_compressed
 
 # Test user for running tests
 TEST_USER:

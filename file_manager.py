@@ -9,10 +9,12 @@ import os
 import stat
 import time
 import yaml
+import tarfile
 
 from pathlib import Path
 from typing import List
 from scp import SCPClient
+from datetime import datetime
 
 # Private imports
 from command_manager import CommandManager
@@ -112,3 +114,26 @@ class FileManager(CommandManager):
         with open(os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'backup_source_private.yaml'), 'r') as file:
             backup_paths = yaml.safe_load(file)
         return backup_paths['backup_source'], backup_paths['backup_source_skip']
+
+    @classmethod
+    def tar_backup(cls):
+        """Create a tar file for bacokup
+        :return:
+        """
+
+        target_to_compress = ConfigManager.get_config_value('BACKUP_DIR')
+
+        now = datetime.now().strftime('%Y_%d_%m__%H_%M_%S')
+        target_compressed = os.path.join(ConfigManager.get_config_value('BACKUP_DIR_COMPRESSED'), f'backup_{now}')
+
+        try:
+            with tarfile.open(target_compressed, 'w:gz') as tar:
+                tar.add(target_to_compress, arcname=os.path.basename(target_to_compress))
+            logging.info(f'Backup created -> {target_compressed}')
+        except Exception as e:
+            logging.error(e)
+
+
+if __name__ == "__main__":
+    FileManager.tar_backup()
+
