@@ -21,6 +21,7 @@ def path_constructor(loader, node):
 class EnvVarLoader(yaml.SafeLoader):
     pass
 
+
 EnvVarLoader.add_implicit_resolver('!path', path_matcher, None)
 EnvVarLoader.add_constructor('!path', path_constructor)
 
@@ -40,11 +41,6 @@ class ErrorFilter(logging.Filter):
         else:
             return True
 
-
-with open(os.path.join(
-        os.getenv('BACKUP_TOOL_DIR', None), 'config', 'config_logger.yaml'), 'r') as f:
-    config = yaml.load(f.read(), Loader=EnvVarLoader)
-    logging.config.dictConfig(config)
 
 DEFAULT_LEVEL = logging.DEBUG
 logger_config = os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'config_logger.yaml')
