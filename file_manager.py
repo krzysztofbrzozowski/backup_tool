@@ -123,7 +123,7 @@ class FileManager(CommandManager):
 
         target_to_compress = ConfigManager.get_config_value('BACKUP_DIR')
 
-        now = datetime.now().strftime('%Y_%d_%m__%H_%M_%S')
+        now = datetime.now().strftime('%Y_%m_%d__%H_%M_%S')
         target_compressed = os.path.join(ConfigManager.get_config_value('BACKUP_DIR_COMPRESSED'), f'backup_{now}')
 
         try:
