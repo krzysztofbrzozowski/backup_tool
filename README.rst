@@ -165,6 +165,8 @@ In Python you can use
 TODO
 ----
 * [X] Import directories to backup form YAML
+* [] Pack files into one one to speed up backup process
+* [] Run tests in Docker Container instead of regular server
 * [X] Create tar or zip after download
 * [] Test creating tar or zip after download
 * [X] Put all the settings in YAML config
