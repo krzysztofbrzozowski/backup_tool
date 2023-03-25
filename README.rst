@@ -73,6 +73,8 @@ Set up paths for test files. No need to create files manually, those will be cre
 
 Run the tests
 
+Prepare Dockerfile to mock your test server
+
 .. code-block:: console
 
     pytest -v tests/test_functional.py
