@@ -47,7 +47,7 @@ class FileManager(CommandManager):
         if not target_path:
             target_path = ConfigManager.get_config_value('BACKUP_DIR')
 
-        CommandManager.connect(use_pkey=True)
+        CommandManager.connect(use_pkey=True, port=port)
 
         with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
             try:

@@ -11,7 +11,8 @@ RUN apk add --no-cache \
     && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
 COPY sshd_config /etc/ssh
+COPY ssh_config /etc/ssh
 EXPOSE 2222
 
-ENTRYPOINT ["/usr/sbin/sshd", "-D", "-e"]
+CMD ["/usr/sbin/sshd", "-D", "-e"]
 #ENTRYPOINT ["/usr/sbin/sshd"]

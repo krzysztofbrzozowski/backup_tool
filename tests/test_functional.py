@@ -27,12 +27,12 @@ def get_file_via_scp(source: str = None, target: str = None, recursive: bool = F
     import subprocess
     import re
 
-    CommandManager.connect()
+    CommandManager.connect(use_pkey=True, port=2222)
 
     # Manual call of scp and getting file size and speed
     # Call 'scp -v -i <pkey> <user>@<host>:<source_file> <target_file>'
-    call_args = f"scp -v {'-r' if recursive else ''} -i {Config.get_config_value('PKEY')} " \
-                f"{Config.get_config_value('USER')}@{Config.get_config_value('HOST')}:{source} {target}"
+    call_args = f"scp -v {'-r' if recursive else ''} -P 2222 -i {Config.get_config_value('PKEY')} " \
+                f"{Config.get_config_value('USER')}@{Config.get_config_value('HOST')}:{source} {target} "
 
     logging.info(f'running command -> {call_args}')
 
@@ -74,11 +74,11 @@ class TestFunctionalBackupTool:
     def test_connection_raises_exception_if_key_not_correct(self):
         """Verifying raising exception if unable to SSH connect"""
         with pytest.raises(BaseException):
-            CommandManager.connect(use_pkey=False)
+            CommandManager.connect(use_pkey=False, port=2222)
 
     def test_login_via_ssh_possible(self):
         """Verifying possibility of SSH connection"""
-        assert CommandManager.connect(use_pkey=True) is None
+        assert CommandManager.connect(use_pkey=True, port=2222) is None
 
     def test_remote_commands_execution_working(self):
         """Comparing size of remotely created file with random size after download to local disc"""
@@ -87,7 +87,7 @@ class TestFunctionalBackupTool:
         # Multiply 1024 * 1024 to get size in bytes
         expected_random_size = random.randint(5, 10) * 1024 * 1024
 
-        CommandManager.connect(use_pkey=True)
+        CommandManager.connect(use_pkey=True, port=2222)
         # Tested method
         CommandManager.execute_command(command=[
             f'rm -r largefiles ; mkdir -p largefiles',
