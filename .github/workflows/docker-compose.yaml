@@ -6,7 +6,7 @@ services:
 #    restart: always
     build: .
     expose:
-      - "22"
+      - "2222"
     ports:
-      - "22:22"
+      - "22:2222"
 
