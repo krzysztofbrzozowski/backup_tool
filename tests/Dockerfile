@@ -1,7 +1,15 @@
 FROM alpine
 
-RUN apk add openrc openssh \
-    && mkdir -p /run/openrc \
-    && touch /run/openrc/softlevel
+RUN apk add --no-cache \
+        openssh \
+    && ssh-keygen -A \
+    && mkdir /root/.ssh \
+    # This is secret generated only for docker purposes
+    && echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFWQPMqG1nVqs1xyAIOxOTIGI8q8X6uLfX3G82Gm1ufc root" > /root/.ssh/authorized_keys \
+    && chmod 0700 /root/.ssh \
+    && echo "root:root" | chpasswd \
+    && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
-ENTRYPOINT ["sh", "-c", "rc-status; rc-service sshd start"]
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D", "-e"]
