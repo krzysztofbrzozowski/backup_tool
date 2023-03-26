@@ -3,8 +3,10 @@ version: '3'
 services:
   # First one is redis server
   ssh-scp-server:
-    restart: always
+#    restart: always
     build: .
+    expose:
+      - "22"
     ports:
       - "22:22"
 
