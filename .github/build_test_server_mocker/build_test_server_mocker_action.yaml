@@ -1,0 +1,6 @@
+name: 'Build test server'
+description: 'Building test server for automated SSH and SCP tests'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
