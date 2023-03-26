@@ -10,7 +10,8 @@ RUN apk add --no-cache \
     && echo "root:root" | chpasswd \
     && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
-#EXPOSE 22
+COPY sshd_config /etc/ssh
+EXPOSE 2222
 
 ENTRYPOINT ["/usr/sbin/sshd", "-D", "-e"]
 #ENTRYPOINT ["/usr/sbin/sshd"]
