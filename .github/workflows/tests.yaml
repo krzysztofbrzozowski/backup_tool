@@ -20,6 +20,6 @@ jobs:
 #      - name: Build SSH and SCP test server
 #        uses: ./.github/build_test_server_mocker
 #      - run: docker run -p 22:22 .
-      - run: docker-compose up
+      - run: docker-compose --file .github/workflows/docker-compose.yaml up
       - run: python run.py --install
       - run: python run.py --pytest tests/test_functional.py
