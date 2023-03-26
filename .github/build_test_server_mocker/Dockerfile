@@ -12,4 +12,5 @@ RUN apk add --no-cache \
 
 EXPOSE 22
 
-ENTRYPOINT ["/usr/sbin/sshd", "-D", "-e"]
+#ENTRYPOINT ["/usr/sbin/sshd", "-D", "-e"]
+ENTRYPOINT ["/usr/sbin/sshd"]
