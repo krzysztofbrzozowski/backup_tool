@@ -2,14 +2,14 @@ name: tests
 on: push
 
 jobs:
-  create-test-container:
-    runs-on: ubuntu-latest
-    name: Build SSH and SCP test server
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: Build SSH and SCP test server
-        uses: ./.github/build_test_server_mocker
+#  create-test-container:
+#    runs-on: ubuntu-latest
+#    name: Build SSH and SCP test server
+#    steps:
+#      - name: checkout
+#        uses: actions/checkout@v3
+#      - name: Build SSH and SCP test server
+#        uses: ./.github/build_test_server_mocker
 
   tests:
     runs-on: ubuntu-latest
@@ -17,5 +17,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Build SSH and SCP test server
+        uses: ./.github/build_test_server_mocker
+
       - run: python run.py --install
       - run: python run.py --pytest tests/test_functional.py
