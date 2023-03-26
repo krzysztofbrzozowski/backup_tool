@@ -5,6 +5,6 @@ services:
   ssh-scp-server:
     restart: always
     build: .
-#    ports:
-#      - "22:22"
+    ports:
+      - "22:22"
 
