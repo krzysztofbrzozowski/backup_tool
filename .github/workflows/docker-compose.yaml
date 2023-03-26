@@ -2,6 +2,9 @@ version: '3'
 # Like containers
 services:
   # First one is redis server
-  redis-server:
-    image: 'redis'
+  ssh-scp-server:
+    restart: always
+    build: .
+    ports:
+      - "22:22"
 
