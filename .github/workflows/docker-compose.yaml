@@ -1,0 +1,7 @@
+version: '3'
+# Like containers
+services:
+  # First one is redis server
+  redis-server:
+    image: 'redis'
+
