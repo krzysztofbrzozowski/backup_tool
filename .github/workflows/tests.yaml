@@ -2,12 +2,15 @@ name: tests
 on: push
 
 jobs:
+  create-test-container:
+      runs-on: ubuntu-latest
+      container:
+        image: node:14.16
   tests:
     runs-on: ubuntu-latest
-    container: python:3.11.1
-    runs:
-      using: 'docker'
-      image: 'tests/Dockerfile'
+    container:
+      python:3.11.1
+      tests/Dockerfile
 
     steps:
       - uses: actions/checkout@v3
