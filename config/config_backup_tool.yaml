@@ -22,7 +22,7 @@ TEST_USER:
   PASSWD:     root
 
   # Private key details
-  PKEY:       /Users/krzysztofbrzozowski/Documents/PROJECTS/SOFTWARE/backup_tool/tests/id_ed25519_docker
+  PKEY:       .github/workflows/id_ed25519_docker
   PASSPHRASE: None
 
   ##################################
