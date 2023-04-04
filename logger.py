@@ -10,6 +10,8 @@ import yaml
 import os
 import re
 
+from pathlib import Path
+
 # Added path loader to load environment variable from in YAML file
 path_matcher = re.compile(r'.*\$\{([^}^{]+)\}.*')
 
@@ -43,7 +45,12 @@ class ErrorFilter(logging.Filter):
 
 
 DEFAULT_LEVEL = logging.DEBUG
-logger_config = os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'config_logger.yaml')
+# logger_config = os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'config_logger.yaml')
+
+# This statement will work until 'tests' dir has the same parent as 'config' dir (parent 'backup_tool' dir)
+logger_config = os.path.join(
+    Path(__file__).parent,
+    'config', 'config_logger.yaml')
 
 # Open YAML config for logging
 if os.path.exists(logger_config):
