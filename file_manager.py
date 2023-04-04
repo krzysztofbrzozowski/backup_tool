@@ -47,7 +47,8 @@ class FileManager(CommandManager):
         if not target_path:
             target_path = ConfigManager.get_config_value('BACKUP_DIR')
 
-        CommandManager.connect(use_pkey=True, port=port)
+        # Connect to SSH server
+        CommandManager.connect(use_pkey=True)
 
         with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
             try:
@@ -117,7 +118,7 @@ class FileManager(CommandManager):
 
     @classmethod
     def tar_backup(cls):
-        """Create a tar file for bacokup
+        """Create a tar file for backup
         :return:
         """
 
