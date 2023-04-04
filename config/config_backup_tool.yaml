@@ -13,13 +13,19 @@ your_pc_name:
 
 # Test user for running tests
 TEST_USER:
-  # Server details
-  HOST:       your_remote_test_host
-  USER:       your_remote_test_user
+  # Docker server details
+  HOST:       localhost
+  USER:       root
+  PORT:       2222
+
+  # Docker server password
+  PASSWD:     root
 
   # Private key details
-  PKEY:       your_private_key_for_test
-  PASSPHRASE: your_private_key_passphrase_for_test
+  PKEY:       some_file
+  PASSPHRASE: None
+
+  ##################################
 
   # Backup target path (absolute)
   BACKUP_DIR: your_test_destination

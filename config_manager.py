@@ -8,6 +8,7 @@ import logging
 import os
 import yaml
 import platform
+from pathlib import Path
 
 from typing import List
 
@@ -16,8 +17,14 @@ class ConfigManager:
     # If test_mode selected it will take TEST_USER config from the YAML
     test_mode = False
     self_name = platform.node()
+
     # Change this line if needed
-    config_path = os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'config_backup_tool_private.yaml')
+    # config_path = os.path.join(os.getenv('BACKUP_TOOL_DIR', None), 'config', 'config_backup_tool_private.yaml')
+
+    # This statement will work until 'tests' dir has the same parent as 'config' dir (parent 'backup_tool' dir)
+    config_path = os.path.join(
+        Path(__file__).parent,
+        'config', 'config_backup_tool.yaml')
 
     @classmethod
     def get_config(cls):
