@@ -11,6 +11,14 @@ jobs:
 #      - name: Build SSH and SCP test server
 #        uses: ./.github/build_test_server_mocker
 
+  prepare-ssh-key:
+    steps:
+      - shell: bash
+        env:
+          docker_pkey: ${{ secrets.DOCKER_PKEY }}
+        run: |
+          prepare_server_test_files.sh docker_pkey
+
   tests:
     runs-on: ubuntu-latest
 #    container: python:3.11.1
