@@ -24,7 +24,7 @@ class ConfigManager:
     # This statement will work until 'tests' dir has the same parent as 'config' dir (parent 'backup_tool' dir)
     config_path = os.path.join(
         Path(__file__).parent,
-        'config', 'config_backup_tool.yaml')
+        'config', 'config_backup_tool_private.yaml')
 
     @classmethod
     def get_config(cls):

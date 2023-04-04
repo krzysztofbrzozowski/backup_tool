@@ -136,3 +136,4 @@ Thumbs.db
 /backup.nosync/
 /run_backup_private.py
 /backup_compressed.nosync/
+/tests/id_ed25519_docker

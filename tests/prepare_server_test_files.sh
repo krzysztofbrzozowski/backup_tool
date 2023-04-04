@@ -1,9 +1,11 @@
 #!/bin/sh
-echo ${0}
-find . -type f ! -name '*.sh' -delete
-mkdir largefiles
-truncate -s 10M 10M_largefile
-cd largefiles
-truncate -s 5M 5M_largefile_0
-truncate -s 5M 5M_largefile_1
-truncate -s 5M 5M_largefile_2
+if [ $# -eq 0 ]; then
+  echo "get arg error"
+  exit 1
+fi
+
+echo "-----BEGIN OPENSSH PRIVATE KEY-----" > id_ed25519_docker
+echo "$1" >> id_ed25519_docker
+echo "-----END OPENSSH PRIVATE KEY-----" >> id_ed25519_docker
+
+

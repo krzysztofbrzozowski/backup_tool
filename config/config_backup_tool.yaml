@@ -22,27 +22,45 @@ TEST_USER:
   PASSWD:     root
 
   # Private key details
-  PKEY:       some_file
+  PKEY:       /Users/krzysztofbrzozowski/Documents/PROJECTS/SOFTWARE/backup_tool/tests/id_ed25519_docker
   PASSPHRASE: None
 
   ##################################
 
   # Backup target path (absolute)
-  BACKUP_DIR: your_test_destination
+#  BACKUP_DIR: your_test_destination
+#
+#  # Test paths for file download (absolute)
+#  TEST_FILE_0: your_test_source/largefiles/5M_largefile_0
+#  TEST_FILE_1: your_test_source/largefiles/5M_largefile_1
+#  TEST_FILE_2: your_test_source/largefiles/5M_largefile_2
+#
+#  TEST_FILE_TARGET_SCP: your_test_destination_for/scp_call/5M_largefile_0
+#  TEST_FILE_TARGET_API: your_test_destination_for/api_call/5M_largefile_0
+#
+#  TEST_FILE_TO_SKIP: your_test_source/largefiles/5M_largefile_1
+#
+#  # Test paths for recursive download (absolute)
+#  TEST_DIR_SOURCE: your_test_source/largefiles
+#  TEST_DIR_TARGET_SCP: your_test_destination_for/scp_call
+#  TEST_DIR_TARGET_API: your_test_destination_for/api_call
+#
+#  TEST_DIR_TO_SKIP: your_test_source/largefiles/folder_to_skip
+  BACKUP_DIR: /Users/krzysztofbrzozowski/Documents/PROJECTS/SOFTWARE/backup_tool/backup.nosync
 
   # Test paths for file download (absolute)
-  TEST_FILE_0: your_test_source/largefiles/5M_largefile_0
-  TEST_FILE_1: your_test_source/largefiles/5M_largefile_1
-  TEST_FILE_2: your_test_source/largefiles/5M_largefile_2
+  TEST_FILE_0: /home/testuser/largefiles/5M_largefile_0
+  TEST_FILE_1: /home/testuser/largefiles/5M_largefile_1
+  TEST_FILE_2: /home/testuser/largefiles/5M_largefile_2
 
-  TEST_FILE_TARGET_SCP: your_test_destination_for/scp_call/5M_largefile_0
-  TEST_FILE_TARGET_API: your_test_destination_for/api_call/5M_largefile_0
+  TEST_FILE_TARGET_SCP: /Users/krzysztofbrzozowski/Documents/PROJECTS/SOFTWARE/backup_tool/backup.nosync/test_artifacts/scp_call/5M_largefile_0
+  TEST_FILE_TARGET_API: /Users/krzysztofbrzozowski/Documents/PROJECTS/SOFTWARE/backup_tool/backup.nosync/test_artifacts/api_call/5M_largefile_0
 
-  TEST_FILE_TO_SKIP: your_test_source/largefiles/5M_largefile_1
+  TEST_FILE_TO_SKIP: /home/testuser/largefiles/5M_largefile_1
 
   # Test paths for recursive download (absolute)
-  TEST_DIR_SOURCE: your_test_source/largefiles
-  TEST_DIR_TARGET_SCP: your_test_destination_for/scp_call
-  TEST_DIR_TARGET_API: your_test_destination_for/api_call
+  TEST_DIR_SOURCE:      /home/testuser/largefiles
+  TEST_DIR_TARGET_SCP:  /Users/krzysztofbrzozowski/Documents/PROJECTS/SOFTWARE/backup_tool/backup.nosync/test_artifacts/scp_call
+  TEST_DIR_TARGET_API:  /Users/krzysztofbrzozowski/Documents/PROJECTS/SOFTWARE/backup_tool/backup.nosync/test_artifacts/api_call
 
-  TEST_DIR_TO_SKIP: your_test_source/largefiles/folder_to_skip
+  TEST_DIR_TO_SKIP:     /home/testuser/largefiles/folder_to_skip
