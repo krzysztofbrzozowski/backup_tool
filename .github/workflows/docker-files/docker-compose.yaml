@@ -4,7 +4,7 @@ services:
   # First one is redis server
   ssh-scp-server:
 #    restart: always
-    build: .
+    build: ..
     expose:
       - "2222"
     ports:
