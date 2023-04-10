@@ -136,4 +136,5 @@ Thumbs.db
 /backup.nosync/
 /run_backup_private.py
 /backup_compressed.nosync/
+/.github/workflows/id_ed25519_docker
 /tmp/id_ed25519_docker
