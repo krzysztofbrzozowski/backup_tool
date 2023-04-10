@@ -22,7 +22,7 @@ TEST_USER:
   PASSWD:     root
 
   # Private key details
-  PKEY:       id_ed25519_docker
+  PKEY:       tmp/id_ed25519_docker
   PASSPHRASE: None
 
   ##################################
