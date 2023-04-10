@@ -4,9 +4,9 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-echo "-----BEGIN OPENSSH PRIVATE KEY-----" > tests/id_ed25519_docker
-echo "$1" >> tests/id_ed25519_docker
-echo "-----END OPENSSH PRIVATE KEY-----" >> tests/id_ed25519_docker
+echo "-----BEGIN OPENSSH PRIVATE KEY-----" > id_ed25519_docker
+echo "$1" >> id_ed25519_docker
+echo "-----END OPENSSH PRIVATE KEY-----" >> id_ed25519_docker
 
-realpath tests/id_ed25519_docker
-cat tests/id_ed25519_docker
+realpath id_ed25519_docker
+cat id_ed25519_docker
