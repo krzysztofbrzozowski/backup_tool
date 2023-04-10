@@ -17,11 +17,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - shell: bash
-        env:
-          docker_pkey: ${{ secrets.DOCKER_PKEY }}
-        run: |
-          .github/workflows/prepare_server_test_files.sh docker_pkey
+#      - shell: bash
+#        env:
+#          docker_pkey: ${{ secrets.DOCKER_PKEY }}
+#        run: |
+#          .github/workflows/prepare_server_test_files.sh docker_pkey
 
       - run: docker-compose --file .github/workflows/docker-compose.yaml up -d
       - run: python run.py --install
