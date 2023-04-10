@@ -28,22 +28,18 @@ TEST_USER:
   ##################################
 
   # Backup target path (relative - start from backup tool directory)
-  BACKUP_DIR:  backup_tool/backup.nosync
+  BACKUP_DIR:     backup.nosync
 
   # Test paths for recursive download (absolute)
-  TEST_DIR_SOURCE:    /largefiles
+  TEST_DIR_SOURCE:              largefiles
 
   # Test paths for file download (absolute)
-  TEST_FILE_0:          /largefiles/5M_largefile_0
-  TEST_FILE_1:          /largefiles/5M_largefile_1
-  TEST_FILE_2:          /largefiles/5M_largefile_2
+  TEST_FILE_0:                  5M_largefile_0
+  TEST_FILE_1:                  5M_largefile_1
+  TEST_FILE_2:                  5M_largefile_2
 
-  TEST_FILE_TO_SKIP:    /largefiles/5M_largefile_1
+  TEST_FILE_TO_SKIP:            largefiles/5M_largefile_1
+  TEST_DIR_TO_SKIP:             largefiles/folder_to_skip
 
-  TEST_FILE_TARGET_SCP: /test_artifacts/scp_call/5M_largefile_0
-  TEST_FILE_TARGET_API: /test_artifacts/api_call/5M_largefile_0
-
-  TEST_DIR_TARGET_SCP:  /test_artifacts/scp_call
-  TEST_DIR_TARGET_API:  /test_artifacts/api_call
-
-  TEST_DIR_TO_SKIP:     /largefiles/folder_to_skip
+  DOWNLOAD_TEST_LOCATION_SCP:   test_artifacts/scp_call
+  DOWNLOAD_TEST_LOCATION_API:   test_artifacts/api_call

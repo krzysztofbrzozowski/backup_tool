@@ -31,6 +31,12 @@ def get_file_via_scp(source: str = None, target: str = None, recursive: bool = F
 
     CommandManager.connect(use_pkey=True)
 
+    # Create parent folder if not exist yet
+    try:
+        os.makedirs(Path(target).parent)
+    except BaseException:
+        pass
+
     # Manual call of scp and getting file size and speed
     # Call 'scp -v -i <pkey> <user>@<host>:<source_file> <target_file>'
     call_args = f"scp -v {'-r' if recursive else ''} -P 2222 -i {Config.get_config_value('PKEY')} " \
@@ -67,7 +73,7 @@ class TestFunctionalBackupTool:
 
         # Clear all downloaded data
         for c_path in Config.get_config_values(
-                ['TEST_FILE_TARGET_SCP', 'TEST_FILE_TARGET_API', 'TEST_DIR_TARGET_SCP', 'TEST_DIR_TARGET_API']):
+                ['DOWNLOAD_TEST_LOCATION_SCP', 'DOWNLOAD_TEST_LOCATION_API']):
             c_path = os.path.join(BASE_DIR, Config.get_config_value('BACKUP_DIR'), c_path)
             for path in Path(c_path).glob("**/*"):
                 if path.is_file(): path.unlink()
@@ -95,7 +101,7 @@ class TestFunctionalBackupTool:
         CommandManager.execute_command(command=[
             f'rm -r largefiles ; mkdir -p largefiles',
             f'cd largefiles ; rm -r *',
-            f'mkdir -p {Config.get_config_value("TEST_DIR_SOURCE")}'
+            f'mkdir -p {Config.get_config_value("TEST_DIR_SOURCE")}',
             f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; rm -r test_remote_executing_command',
             f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; mkdir test_remote_executing_command',
             f'cd {Config.get_config_value("TEST_DIR_SOURCE")}/test_remote_executing_command ; truncate -s {expected_random_size} {expected_random_size}B_largefile'
@@ -132,16 +138,34 @@ class TestFunctionalBackupTool:
 
     def test_downloaded_file_size_is_correct(self):
         """Verifying downloaded file have correct size"""
-        source = Config.get_config_value('TEST_FILE_0')
+        # Create source path
+        source_path = os.path.join(
+            Config.get_config_value('TEST_DIR_SOURCE'),
+            Config.get_config_value('TEST_FILE_0')
+        )
+        # Create download path using SCP
+        target_path_scp = os.path.join(
+            BASE_DIR,
+            Config.get_config_value('BACKUP_DIR'),
+            Config.get_config_value('DOWNLOAD_TEST_LOCATION_SCP'),
+            source_path
+        )
+        # Create download path using API
+        target_path_api = os.path.join(
+            BASE_DIR,
+            Config.get_config_value('BACKUP_DIR'),
+            Config.get_config_value('DOWNLOAD_TEST_LOCATION_API'),
+            source_path
+        )
 
         # Not needed return values since comparison works on folder/file level base
-        get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'), recursive=False)
+        get_file_via_scp(source=fr'/{source_path}', target=target_path_scp, recursive=True)
 
-        test_target_file = Path(Config.get_config_value('TEST_FILE_TARGET_SCP'))
-        expected_target_size = os.stat(test_target_file).st_size
+        # test_target_file = Path(target_path_scp)
+        expected_target_size = os.stat(Path(target_path_scp)).st_size
 
         # Tested method
-        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
+        target_size, _ = FileManager.get(source_path=fr'/{source_path}', target_path=target_path_api)
 
         assert target_size == expected_target_size
 

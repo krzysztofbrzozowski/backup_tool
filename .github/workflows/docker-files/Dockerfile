@@ -10,6 +10,11 @@ RUN apk add --no-cache \
     && echo "root:root" | chpasswd \
     && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
+# TESTFILES
+RUN mkdir largefiles
+WORKDIR largefiles
+RUN truncate -s 5M 5M_largefile_0 && truncate -s 5M 5M_largefile_1 && truncate -s 5M 5M_largefile_2
+
 COPY sshd_config /etc/ssh
 COPY ssh_config /etc/ssh
 EXPOSE 2222
