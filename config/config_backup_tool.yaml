@@ -22,7 +22,7 @@ TEST_USER:
   PASSWD:     root
 
   # Private key details
-  PKEY:       /home/runner/work/backup_tool/backup_tool/.github/workflows/id_ed25519_docker
+  PKEY:       /home/runner/work/backup_tool/backup_tool/id_ed25519_docker
   PASSPHRASE: None
 
   ##################################
