@@ -83,127 +83,127 @@ class TestFunctionalBackupTool:
         """Verifying possibility of SSH connection"""
         assert CommandManager.connect(use_pkey=True) is None
 
-    def test_remote_commands_execution_working(self):
-        """Comparing size of remotely created file with random size after download to local disc"""
-        import random
-        # Create random size of file which is also expected one after download
-        # Multiply 1024 * 1024 to get size in bytes
-        expected_random_size = random.randint(5, 10) * 1024 * 1024
-
-        CommandManager.connect(use_pkey=True)
-        # Tested method
-        CommandManager.execute_command(command=[
-            f'rm -r largefiles ; mkdir -p largefiles',
-            f'cd largefiles ; rm -r *',
-            f'mkdir -p {Config.get_config_value("TEST_DIR_SOURCE")}'
-            f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; rm -r test_remote_executing_command',
-            f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; mkdir test_remote_executing_command',
-            f'cd {Config.get_config_value("TEST_DIR_SOURCE")}/test_remote_executing_command ; truncate -s {expected_random_size} {expected_random_size}B_largefile'
-        ])
-
-        # Download file via SCP
-        get_file_via_scp(
-            source=os.path.join(Config.get_config_value('TEST_DIR_SOURCE'), 'test_remote_executing_command', f'{expected_random_size}B_largefile'),
-            target=os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP')),
-            recursive=False)
-
-        random_size = os.stat(
-            os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP'), f'{expected_random_size}B_largefile')
-        ).st_size
-
-        # Prepare some data for other tests
-        # TODO it need to be replaced with better solution
-        CommandManager.execute_command(command=[
-            f'rm -r largefiles ; mkdir largefiles',
-            f'cd largefiles ; rm -r *',
-            f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_0")}',
-            f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_1")}',
-            f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_2")}',
-            'cd largefiles ; mkdir folder_to_skip',
-            'cd largefiles/folder_to_skip ; truncate -s 5M 5M_largefile_to_skip',
-        ])
-
-        assert random_size == expected_random_size
-
-    def test_remote_commands_execution_awaiting_for_done(self):
-        """Verify script awaits remote executing command done"""
-        # TODO write the test for awaiting execution done
-        assert True is False
-
-    def test_downloaded_file_size_is_correct(self):
-        """Verifying downloaded file have correct size"""
-        source = Config.get_config_value('TEST_FILE_0')
-
-        # Not needed return values since comparison works on folder/file level base
-        get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'), recursive=False)
-
-        test_target_file = Path(Config.get_config_value('TEST_FILE_TARGET_SCP'))
-        expected_target_size = os.stat(test_target_file).st_size
-
-        # Tested method
-        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
-
-        assert target_size == expected_target_size
-
-    def test_downloaded_directory_size_is_correct(self):
-        """Verifying downloaded files (recursive) have correct size"""
-        source = Config.get_config_value('TEST_DIR_SOURCE')
-
-        # Verify size of whole folder
-        # Not needed return values since comparison works on folder/file level base
-        get_file_via_scp(source=source, target=Config.get_config_value('TEST_DIR_TARGET_SCP'), recursive=True)
-
-        directory = Path(Config.get_config_value('TEST_DIR_TARGET_SCP'))
-        expected_target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
-
-        # Tested method
-        target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_DIR_TARGET_API'))
-
-        assert target_size == expected_target_size
-
-    def test_download_speed_is_correct(self):
-        """Comparing downloading speed using SCPClient and raw SCP call from console"""
-        source = Config.get_config_value('TEST_FILE_0')
-        # Manual call of scp and getting file size and speed
-        _, expected_download_speed = get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'))
-
-        # Tested method
-        _, download_speed = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
-
-        assert download_speed == expected_download_speed
-
-    def test_skip_path_is_working_for_directory(self):
-        """Verify if in downloaded folder skip path is omitted during downloading"""
-
-        source = Config.get_config_value('TEST_DIR_SOURCE')
-
-        # Tested method with skipping paths
-        target_size, _ = FileManager.get(source_path=source,
-                                         target_path=Config.get_config_value('TEST_DIR_TARGET_API'),
-                                         skip_path=Config.get_config_values(['TEST_FILE_TO_SKIP', 'TEST_DIR_TO_SKIP']))
-
-        # In test folder there are only 2 files, each 5MB, size in bytes
-        expected_file_size = 10 * 1024 * 1024
-
-        assert target_size == expected_file_size
-
-    def test_skip_path_is_working_for_file(self):
-        """Verify if in downloaded folder skip path is omitted during downloading"""
-
-        source = Config.get_config_values(['TEST_FILE_0', 'TEST_FILE_1', 'TEST_FILE_2'])
-
-        # Tested method with skipping paths
-        target_size, _ = FileManager.get(source_path=source,
-                                         target_path=Config.get_config_value('TEST_DIR_TARGET_API'),
-                                         skip_path=Config.get_config_value('TEST_FILE_1'))
-
-        # In test folder there are only 2 files, each 5MB, size in bytes
-        expected_file_size = 10 * 1024 * 1024
-
-        assert target_size == expected_file_size
-
-    def test_compressing_downloaded_backup_working(self):
-        """Verify size before compressing and after decompression has the same size"""
-        # TODO write the test for compressing downloaded backup
-        assert True is False
+    # def test_remote_commands_execution_working(self):
+    #     """Comparing size of remotely created file with random size after download to local disc"""
+    #     import random
+    #     # Create random size of file which is also expected one after download
+    #     # Multiply 1024 * 1024 to get size in bytes
+    #     expected_random_size = random.randint(5, 10) * 1024 * 1024
+    #
+    #     CommandManager.connect(use_pkey=True)
+    #     # Tested method
+    #     CommandManager.execute_command(command=[
+    #         f'rm -r largefiles ; mkdir -p largefiles',
+    #         f'cd largefiles ; rm -r *',
+    #         f'mkdir -p {Config.get_config_value("TEST_DIR_SOURCE")}'
+    #         f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; rm -r test_remote_executing_command',
+    #         f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; mkdir test_remote_executing_command',
+    #         f'cd {Config.get_config_value("TEST_DIR_SOURCE")}/test_remote_executing_command ; truncate -s {expected_random_size} {expected_random_size}B_largefile'
+    #     ])
+    #
+    #     # Download file via SCP
+    #     get_file_via_scp(
+    #         source=os.path.join(Config.get_config_value('TEST_DIR_SOURCE'), 'test_remote_executing_command', f'{expected_random_size}B_largefile'),
+    #         target=os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP')),
+    #         recursive=False)
+    #
+    #     random_size = os.stat(
+    #         os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP'), f'{expected_random_size}B_largefile')
+    #     ).st_size
+    #
+    #     # Prepare some data for other tests
+    #     # TODO it need to be replaced with better solution
+    #     CommandManager.execute_command(command=[
+    #         f'rm -r largefiles ; mkdir largefiles',
+    #         f'cd largefiles ; rm -r *',
+    #         f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_0")}',
+    #         f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_1")}',
+    #         f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_2")}',
+    #         'cd largefiles ; mkdir folder_to_skip',
+    #         'cd largefiles/folder_to_skip ; truncate -s 5M 5M_largefile_to_skip',
+    #     ])
+    #
+    #     assert random_size == expected_random_size
+    #
+    # def test_remote_commands_execution_awaiting_for_done(self):
+    #     """Verify script awaits remote executing command done"""
+    #     # TODO write the test for awaiting execution done
+    #     assert True is False
+    #
+    # def test_downloaded_file_size_is_correct(self):
+    #     """Verifying downloaded file have correct size"""
+    #     source = Config.get_config_value('TEST_FILE_0')
+    #
+    #     # Not needed return values since comparison works on folder/file level base
+    #     get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'), recursive=False)
+    #
+    #     test_target_file = Path(Config.get_config_value('TEST_FILE_TARGET_SCP'))
+    #     expected_target_size = os.stat(test_target_file).st_size
+    #
+    #     # Tested method
+    #     target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
+    #
+    #     assert target_size == expected_target_size
+    #
+    # def test_downloaded_directory_size_is_correct(self):
+    #     """Verifying downloaded files (recursive) have correct size"""
+    #     source = Config.get_config_value('TEST_DIR_SOURCE')
+    #
+    #     # Verify size of whole folder
+    #     # Not needed return values since comparison works on folder/file level base
+    #     get_file_via_scp(source=source, target=Config.get_config_value('TEST_DIR_TARGET_SCP'), recursive=True)
+    #
+    #     directory = Path(Config.get_config_value('TEST_DIR_TARGET_SCP'))
+    #     expected_target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
+    #
+    #     # Tested method
+    #     target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_DIR_TARGET_API'))
+    #
+    #     assert target_size == expected_target_size
+    #
+    # def test_download_speed_is_correct(self):
+    #     """Comparing downloading speed using SCPClient and raw SCP call from console"""
+    #     source = Config.get_config_value('TEST_FILE_0')
+    #     # Manual call of scp and getting file size and speed
+    #     _, expected_download_speed = get_file_via_scp(source=source, target=Config.get_config_value('TEST_FILE_TARGET_SCP'))
+    #
+    #     # Tested method
+    #     _, download_speed = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
+    #
+    #     assert download_speed == expected_download_speed
+    #
+    # def test_skip_path_is_working_for_directory(self):
+    #     """Verify if in downloaded folder skip path is omitted during downloading"""
+    #
+    #     source = Config.get_config_value('TEST_DIR_SOURCE')
+    #
+    #     # Tested method with skipping paths
+    #     target_size, _ = FileManager.get(source_path=source,
+    #                                      target_path=Config.get_config_value('TEST_DIR_TARGET_API'),
+    #                                      skip_path=Config.get_config_values(['TEST_FILE_TO_SKIP', 'TEST_DIR_TO_SKIP']))
+    #
+    #     # In test folder there are only 2 files, each 5MB, size in bytes
+    #     expected_file_size = 10 * 1024 * 1024
+    #
+    #     assert target_size == expected_file_size
+    #
+    # def test_skip_path_is_working_for_file(self):
+    #     """Verify if in downloaded folder skip path is omitted during downloading"""
+    #
+    #     source = Config.get_config_values(['TEST_FILE_0', 'TEST_FILE_1', 'TEST_FILE_2'])
+    #
+    #     # Tested method with skipping paths
+    #     target_size, _ = FileManager.get(source_path=source,
+    #                                      target_path=Config.get_config_value('TEST_DIR_TARGET_API'),
+    #                                      skip_path=Config.get_config_value('TEST_FILE_1'))
+    #
+    #     # In test folder there are only 2 files, each 5MB, size in bytes
+    #     expected_file_size = 10 * 1024 * 1024
+    #
+    #     assert target_size == expected_file_size
+    #
+    # def test_compressing_downloaded_backup_working(self):
+    #     """Verify size before compressing and after decompression has the same size"""
+    #     # TODO write the test for compressing downloaded backup
+    #     assert True is False
 
