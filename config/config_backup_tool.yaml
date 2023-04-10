@@ -27,22 +27,23 @@ TEST_USER:
 
   ##################################
 
-  # Backup target path (absolute)
-#  BACKUP_DIR: your_test_destination
-#
-#  # Test paths for file download (absolute)
-#  TEST_FILE_0: your_test_source/largefiles/5M_largefile_0
-#  TEST_FILE_1: your_test_source/largefiles/5M_largefile_1
-#  TEST_FILE_2: your_test_source/largefiles/5M_largefile_2
-#
-#  TEST_FILE_TARGET_SCP: your_test_destination_for/scp_call/5M_largefile_0
-#  TEST_FILE_TARGET_API: your_test_destination_for/api_call/5M_largefile_0
-#
-#  TEST_FILE_TO_SKIP: your_test_source/largefiles/5M_largefile_1
-#
-#  # Test paths for recursive download (absolute)
-#  TEST_DIR_SOURCE: your_test_source/largefiles
-#  TEST_DIR_TARGET_SCP: your_test_destination_for/scp_call
-#  TEST_DIR_TARGET_API: your_test_destination_for/api_call
-#
-#  TEST_DIR_TO_SKIP: your_test_source/largefiles/folder_to_skip
+  # Backup target path (relative - start from backup tool directory)
+  BACKUP_DIR:  backup_tool/backup.nosync
+
+  # Test paths for recursive download (absolute)
+  TEST_DIR_SOURCE:    /largefiles
+
+  # Test paths for file download (absolute)
+  TEST_FILE_0:          /largefiles/5M_largefile_0
+  TEST_FILE_1:          /largefiles/5M_largefile_1
+  TEST_FILE_2:          /largefiles/5M_largefile_2
+
+  TEST_FILE_TO_SKIP:    /largefiles/5M_largefile_1
+
+  TEST_FILE_TARGET_SCP: /test_artifacts/scp_call/5M_largefile_0
+  TEST_FILE_TARGET_API: /test_artifacts/api_call/5M_largefile_0
+
+  TEST_DIR_TARGET_SCP:  /test_artifacts/scp_call
+  TEST_DIR_TARGET_API:  /test_artifacts/api_call
+
+  TEST_DIR_TO_SKIP:     /largefiles/folder_to_skip

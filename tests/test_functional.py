@@ -16,6 +16,8 @@ from file_manager import FileManager
 from command_manager import CommandManager
 from config_manager import ConfigManager as Config
 
+BASE_DIR = Path(__file__).parent.parent
+
 
 def get_file_via_scp(source: str = None, target: str = None, recursive: bool = False):
     """Call downloading file via SCP using subprocess
@@ -66,6 +68,7 @@ class TestFunctionalBackupTool:
         # Clear all downloaded data
         for c_path in Config.get_config_values(
                 ['TEST_FILE_TARGET_SCP', 'TEST_FILE_TARGET_API', 'TEST_DIR_TARGET_SCP', 'TEST_DIR_TARGET_API']):
+            c_path = os.path.join(BASE_DIR, Config.get_config_value('BACKUP_DIR'), c_path)
             for path in Path(c_path).glob("**/*"):
                 if path.is_file(): path.unlink()
                 elif path.is_dir(): rmtree(path)
