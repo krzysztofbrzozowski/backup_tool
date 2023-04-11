@@ -29,8 +29,8 @@ jobs:
       - name: Run local SSH server from Docker
         run: docker-compose --file .github/workflows/docker-files/docker-compose.yaml up -d
 
-      - name: Test SCP
-        run: scp -o StrictHostKeyChecking=no -v -r -P 2222 -i tmp/id_ed25519_docker root@localhost:/largefiles/5M_largefile_0 .
+#      - name: Test SCP
+#        run: scp -o StrictHostKeyChecking=no -v -r -P 2222 -i tmp/id_ed25519_docker root@localhost:/largefiles/5M_largefile_0 .
 
       - name: Install all dependencies for Python
         run: python run.py --install
