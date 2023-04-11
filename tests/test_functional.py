@@ -53,6 +53,7 @@ def get_file_via_scp(source: str = None, target: str = None, recursive: bool = F
                     # Line looks similar: Transferred: sent 17504, received 10506872 bytes, in 13.8 seconds
                     # Looking for data
                     sent, transferred, time_transfer = re.findall(r'[\d+^.]+|\d+[.]\d+', line)
+                    print(line)
             except Exception as e:
                 logging.error(f'test output | {e}')
     proc.wait()
