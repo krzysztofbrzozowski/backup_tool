@@ -54,18 +54,17 @@ def get_file_via_scp(source: str = None, target: str = None, recursive: bool = F
                     # Line looks similar: Transferred: sent 17504, received 10506872 bytes, in 13.8 seconds
                     # Looking for data
                     sent, transferred, time_transfer = re.findall(r'[\d+^.]+|\d+[.]\d+', line)
-                    # TODO - Why this sleep makes it pass in CI?
-                    time.sleep(0.1)
             except Exception as e:
                 logging.error(f'test output | {e}')
     proc.wait()
 
     # Get estimated target size from debug log
     expected_target_size = (int(transferred) - int(sent)) / (1024 * 1024)
-    expected_download_speed = expected_target_size / float(time_transfer)
-    logging.info(f'test output | {expected_download_speed:.2f} MB/s')
+    # expected_download_speed = expected_target_size / float(time_transfer)
+    # logging.info(f'test output | {expected_download_speed:.2f} MB/s')
 
-    return expected_target_size, expected_download_speed
+    # return expected_target_size, expected_download_speed
+    return expected_target_size
 
 
 class TestFunctionalBackupTool:
