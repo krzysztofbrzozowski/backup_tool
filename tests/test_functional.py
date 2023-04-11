@@ -171,22 +171,38 @@ class TestFunctionalBackupTool:
 
         assert target_size == expected_target_size
 
-    # def test_downloaded_directory_size_is_correct(self):
-    #     """Verifying downloaded files (recursive) have correct size"""
-    #     source = Config.get_config_value('TEST_DIR_SOURCE')
-    #
-    #     # Verify size of whole folder
-    #     # Not needed return values since comparison works on folder/file level base
-    #     get_file_via_scp(source=source, target=Config.get_config_value('TEST_DIR_TARGET_SCP'), recursive=True)
-    #
-    #     directory = Path(Config.get_config_value('TEST_DIR_TARGET_SCP'))
-    #     expected_target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
-    #
-    #     # Tested method
-    #     target_size, _ = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_DIR_TARGET_API'))
-    #
-    #     assert target_size == expected_target_size
-    #
+    def test_downloaded_directory_size_is_correct(self):
+        """Verifying downloaded files (recursive) have correct size"""
+        # Create source path
+        source_path = Config.get_config_value('TEST_DIR_SOURCE')
+
+        # Create download path using SCP
+        target_path_scp = os.path.join(
+            BASE_DIR,
+            Config.get_config_value('BACKUP_DIR'),
+            Config.get_config_value('DOWNLOAD_TEST_LOCATION_SCP'),
+            source_path
+        )
+        # Create download path using API
+        target_path_api = os.path.join(
+            BASE_DIR,
+            Config.get_config_value('BACKUP_DIR'),
+            Config.get_config_value('DOWNLOAD_TEST_LOCATION_API'),
+            source_path
+        )
+
+        # Verify size of whole folder
+        # Not needed return values since comparison works on folder/file level base
+        get_file_via_scp(source=fr'/{source_path}', target=target_path_scp, recursive=True)
+
+        directory = Path(target_path_scp)
+        expected_target_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
+
+        # Tested method
+        target_size, _ = FileManager.get(source_path=fr'/{source_path}', target_path=target_path_api)
+
+        assert target_size == expected_target_size
+
     # def test_download_speed_is_correct(self):
     #     """Comparing downloading speed using SCPClient and raw SCP call from console"""
     #     source = Config.get_config_value('TEST_FILE_0')
