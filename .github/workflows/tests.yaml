@@ -22,12 +22,18 @@ jobs:
           docker_pkey: ${{ secrets.DOCKER_PKEY }}
         run: |
           .github/workflows/prepare_server_test_files.sh "$docker_pkey"
+
       - name: Install SCP client
         run: sudo apt-get -y install openssh-client
 
-      - name: test SCP
-        run: scp
+      - name: Run local SSH server from Docker
+        run: docker-compose --file .github/workflows/docker-files/docker-compose.yaml up -d
 
-      - run: docker-compose --file .github/workflows/docker-files/docker-compose.yaml up -d
-      - run: python run.py --install
-      - run: python run.py --pytest tests/test_functional.py
+      - name: Test SCP
+        run: scp -v -r -P 2222 -i tmp/id_ed25519_docker root@localhost:/largefiles/5M_largefile_0 .
+
+      - name: Install all dependencies for Python
+        run: python run.py --install
+
+      - name: Run tests
+        run: python run.py --pytest tests/test_functional.py
