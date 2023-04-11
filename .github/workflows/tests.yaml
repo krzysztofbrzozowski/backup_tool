@@ -25,6 +25,9 @@ jobs:
       - name: Install SCP client
         run: sudo apt-get -y install openssh-client
 
+      - name: test SCP
+        run: scp
+
       - run: docker-compose --file .github/workflows/docker-files/docker-compose.yaml up -d
       - run: python run.py --install
       - run: python run.py --pytest tests/test_functional.py
