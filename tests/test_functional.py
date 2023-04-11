@@ -39,7 +39,7 @@ def get_file_via_scp(source: str = None, target: str = None, recursive: bool = F
 
     # Manual call of scp and getting file size and speed
     # Call 'scp -v -i <pkey> <user>@<host>:<source_file> <target_file>'
-    call_args = f"scp -v {'-r' if recursive else ''} -P 2222 -i {Config.get_config_value('PKEY')} " \
+    call_args = f"scp -o StrictHostKeyChecking=no -v {'-r' if recursive else ''} -P 2222 -i {Config.get_config_value('PKEY')} " \
                 f"{Config.get_config_value('USER')}@{Config.get_config_value('HOST')}:{source} {target} "
 
     logging.info(f'running command -> {call_args}')
