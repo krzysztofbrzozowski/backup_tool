@@ -27,7 +27,7 @@ class FileManager(CommandManager):
     def create_dir(path: Path):
         try:
             if not os.path.exists(path):
-                os.mkdir(path)
+                os.makedirs(path, exist_ok=True)
         except OSError as e:
             logging.error(e)
 
@@ -48,7 +48,11 @@ class FileManager(CommandManager):
             target_path = ConfigManager.get_config_value('BACKUP_DIR')
 
         # Create parent folder if not exist yet
-        os.makedirs(Path(target_path).parent, exist_ok=True)
+        # TODO this can be removed probably -> line 85 to has better logic
+        try:
+            os.makedirs(Path(target_path).parent)
+        except BaseException:
+            pass
 
         # Connect to SSH server
         CommandManager.connect(use_pkey=True)

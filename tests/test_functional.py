@@ -34,9 +34,10 @@ def get_file_via_scp(source: str = None, target: str = None, recursive: bool = F
 
     # Create parent folder if not exist yet
     try:
-        os.makedirs(Path(target).parent)
-    except BaseException:
-        pass
+        if not os.path.exists(Path(target).parent):
+            os.makedirs(Path(target).parent, exist_ok=True)
+    except OSError as e:
+        logging.error(e)
 
     # Manual call of scp and getting file size and speed
     # Call 'scp -v -i <pkey> <user>@<host>:<source_file> <target_file>'
