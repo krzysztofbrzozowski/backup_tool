@@ -34,11 +34,11 @@ TEST_USER:
   TEST_DIR_SOURCE:              largefiles
 
   # Test paths for file download (absolute)
-  TEST_FILE_0:                  5M_largefile_0
-  TEST_FILE_1:                  5M_largefile_1
-  TEST_FILE_2:                  5M_largefile_2
+  TEST_FILE_0:                  largefile_0
+  TEST_FILE_1:                  largefile_1
+  TEST_FILE_2:                  largefile_2
 
-  TEST_FILE_TO_SKIP:            largefiles/5M_largefile_1
+  TEST_FILE_TO_SKIP:            largefiles/largefile_1
   TEST_DIR_TO_SKIP:             largefiles/folder_to_skip
 
   DOWNLOAD_TEST_LOCATION_SCP:   test_artifacts/scp_call

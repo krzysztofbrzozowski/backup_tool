@@ -13,7 +13,7 @@ RUN apk add --no-cache \
 # TESTFILES
 RUN mkdir largefiles
 WORKDIR largefiles
-RUN truncate -s 5M 5M_largefile_0 && truncate -s 5M 5M_largefile_1 && truncate -s 5M 5M_largefile_2
+RUN truncate -s 10M largefile_0 && truncate -s 10M largefile_1 && truncate -s 10M largefile_2
 
 COPY sshd_config /etc/ssh
 COPY ssh_config /etc/ssh
