@@ -47,13 +47,6 @@ class FileManager(CommandManager):
         if not target_path:
             target_path = ConfigManager.get_config_value('BACKUP_DIR')
 
-        # Create parent folder if not exist yet
-        # TODO this can be removed probably -> line 85 to has better logic
-        # try:
-        #     os.makedirs(Path(target_path).parent)
-        # except BaseException:
-        #     pass
-
         # Connect to SSH server
         CommandManager.connect(use_pkey=True)
 
