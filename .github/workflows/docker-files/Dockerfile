@@ -11,9 +11,16 @@ RUN apk add --no-cache \
     && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
 # TESTFILES
+# Files to download
 RUN mkdir largefiles
 WORKDIR largefiles
 RUN truncate -s 10M largefile_0 && truncate -s 10M largefile_1 && truncate -s 10M largefile_2
+
+# Files to skip
+RUN truncate -s 10M file_to_skip_0  \
+    && mkdir "folder_to_skip"  \
+    && cd folder_to_skip  \
+    && truncate -s 10M file_to_skip_1
 
 COPY sshd_config /etc/ssh
 COPY ssh_config /etc/ssh
