@@ -49,10 +49,10 @@ class FileManager(CommandManager):
 
         # Create parent folder if not exist yet
         # TODO this can be removed probably -> line 85 to has better logic
-        try:
-            os.makedirs(Path(target_path).parent)
-        except BaseException:
-            pass
+        # try:
+        #     os.makedirs(Path(target_path).parent)
+        # except BaseException:
+        #     pass
 
         # Connect to SSH server
         CommandManager.connect(use_pkey=True)
@@ -88,6 +88,7 @@ class FileManager(CommandManager):
                     else:
                         _listdir = {source: False} if source not in skip_path else None
                         _target_path = target_path
+                        cls.create_dir(path=Path(_target_path).parent)
 
                     # Skip loop if empty list
                     if _listdir is None:
