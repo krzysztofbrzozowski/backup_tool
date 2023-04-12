@@ -27,7 +27,7 @@ class CommandManager:
         :raises:
             Exception if unable to connect to server
         """
-        logging.info('SSH connceting')
+        logging.info('SSH connecting')
         if use_pkey:
             cls.ssh.load_system_host_keys()
 

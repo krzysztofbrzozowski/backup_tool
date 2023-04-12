@@ -92,48 +92,42 @@ class TestFunctionalBackupTool:
         """Verifying possibility of SSH connection"""
         assert CommandManager.connect(use_pkey=True) is None
 
-    # def test_remote_commands_execution_working(self):
-    #     """Comparing size of remotely created file with random size after download to local disc"""
-    #     import random
-    #     # Create random size of file which is also expected one after download
-    #     # Multiply 1024 * 1024 to get size in bytes
-    #     expected_random_size = random.randint(5, 10) * 1024 * 1024
-    #
-    #     CommandManager.connect(use_pkey=True)
-    #     # Tested method
-    #     CommandManager.execute_command(command=[
-    #         f'rm -r largefiles ; mkdir -p largefiles',
-    #         f'cd largefiles ; rm -r *',
-    #         f'mkdir -p {Config.get_config_value("TEST_DIR_SOURCE")}',
-    #         f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; rm -r test_remote_executing_command',
-    #         f'cd {Config.get_config_value("TEST_DIR_SOURCE")} ; mkdir test_remote_executing_command',
-    #         f'cd {Config.get_config_value("TEST_DIR_SOURCE")}/test_remote_executing_command ; truncate -s {expected_random_size} {expected_random_size}B_largefile'
-    #     ])
-    #
-    #     # Download file via SCP
-    #     get_file_via_scp(
-    #         source=os.path.join(Config.get_config_value('TEST_DIR_SOURCE'), 'test_remote_executing_command', f'{expected_random_size}B_largefile'),
-    #         target=os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP')),
-    #         recursive=False)
-    #
-    #     random_size = os.stat(
-    #         os.path.join(Config.get_config_value('TEST_DIR_TARGET_SCP'), f'{expected_random_size}B_largefile')
-    #     ).st_size
-    #
-    #     # Prepare some data for other tests
-    #     # TODO it need to be replaced with better solution
-    #     CommandManager.execute_command(command=[
-    #         f'rm -r largefiles ; mkdir largefiles',
-    #         f'cd largefiles ; rm -r *',
-    #         f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_0")}',
-    #         f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_1")}',
-    #         f'cd largefiles ; truncate -s 5M {Config.get_config_value("TEST_FILE_2")}',
-    #         'cd largefiles ; mkdir folder_to_skip',
-    #         'cd largefiles/folder_to_skip ; truncate -s 5M 5M_largefile_to_skip',
-    #     ])
-    #
-    #     assert random_size == expected_random_size
-    #
+    def test_remote_commands_execution_working(self):
+        """Comparing size of remotely created file with random size after download to local disc"""
+        import random
+        # Create random size of file which is also expected one after download
+        # Multiply 1024 * 1024 to get size in bytes
+        expected_random_size = random.randint(5, 10) * 1024 * 1024
+
+        # Create source path
+        source_path = os.path.join(
+            Config.get_config_value('TEST_DIR_SOURCE'),
+            'test_remote_executing_command',
+            f'{expected_random_size}B_largefile'
+        )
+
+        # Create download path using SCP
+        target_path_scp = os.path.join(
+            BASE_DIR,
+            Config.get_config_value('BACKUP_DIR'),
+            Config.get_config_value('DOWNLOAD_TEST_LOCATION_SCP'),
+            source_path
+        )
+
+        CommandManager.connect(use_pkey=True)
+        # Tested method
+        CommandManager.execute_command(command=[
+            fr'mkdir -p /{Path(source_path).parent}',
+            fr'rm /{source_path} ; truncate -s {expected_random_size} /{source_path}'
+        ])
+
+        # Download file via SCP
+        get_file_via_scp(source=fr'/{source_path}', target=target_path_scp, recursive=False)
+
+        random_size = os.stat(target_path_scp).st_size
+
+        assert random_size == expected_random_size
+
     # def test_remote_commands_execution_awaiting_for_done(self):
     #     """Verify script awaits remote executing command done"""
     #     # TODO write the test for awaiting execution done
