@@ -214,7 +214,7 @@ class TestFunctionalBackupTool:
     #
     #     assert download_speed == expected_download_speed
     #
-    def test_skip_path_is_working_for_directory(self):
+    def test_skip_path_is_working_for_file_and_directory(self):
         """Verify if in downloaded folder skip path is omitted during downloading"""
         # Create source path
         source_path = Config.get_config_value('TEST_DIR_SOURCE')
@@ -237,15 +237,6 @@ class TestFunctionalBackupTool:
             Config.get_config_value('TEST_DIR_TO_SKIP')
         )
 
-        # Tested method without skipping paths (negative scenario to confirm)
-        target_size, _ = FileManager.get(source_path=fr'/{source_path}',
-                                         target_path=target_path_api)
-
-        # In test folder there are only 5 files, each 10MB, size in bytes
-        expected_file_size = 50 * 1024 * 1024
-
-        assert target_size == expected_file_size
-
         # Tested method with skipping paths
         target_size, _ = FileManager.get(source_path=fr'/{source_path}',
                                          target_path=target_path_api,
@@ -256,22 +247,15 @@ class TestFunctionalBackupTool:
 
         assert target_size == expected_file_size
 
+        # Tested method without skipping paths (negative scenario to confirm)
+        target_size, _ = FileManager.get(source_path=fr'/{source_path}',
+                                         target_path=target_path_api)
 
-    # def test_skip_path_is_working_for_file(self):
-    #     """Verify if in downloaded folder skip path is omitted during downloading"""
-    #
-    #     source = Config.get_config_values(['TEST_FILE_0', 'TEST_FILE_1', 'TEST_FILE_2'])
-    #
-    #     # Tested method with skipping paths
-    #     target_size, _ = FileManager.get(source_path=source,
-    #                                      target_path=Config.get_config_value('TEST_DIR_TARGET_API'),
-    #                                      skip_path=Config.get_config_value('TEST_FILE_1'))
-    #
-    #     # In test folder there are only 2 files, each 5MB, size in bytes
-    #     expected_file_size = 10 * 1024 * 1024
-    #
-    #     assert target_size == expected_file_size
-    #
+        # In test folder there are only 5 files, each 10MB, size in bytes
+        expected_file_size = 50 * 1024 * 1024
+
+        assert target_size == expected_file_size
+
     # def test_compressing_downloaded_backup_working(self):
     #     """Verify size before compressing and after decompression has the same size"""
     #     # TODO write the test for compressing downloaded backup
