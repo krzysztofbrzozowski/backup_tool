@@ -180,8 +180,9 @@ TODO
 * [] Test creating tar or zip after download
 * [X] Put all the settings in YAML config
 * [X] Use different logger in tests than in regular call -> switched off logging as tem solution
-* [] Create put method
-* [] Test put method
+* [X] Create put method
+* [X] Test put method
+* [] Add skip path for put method
 * [X] Create method to remotely execute commands
 * [X] Test remote cmd execution method
 * [X] Prepare tar from sql db

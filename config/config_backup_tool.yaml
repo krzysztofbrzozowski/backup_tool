@@ -39,7 +39,9 @@ TEST_USER:
   TEST_FILE_2:                  largefile_2
 
   TEST_FILE_TO_SKIP:            file_to_skip_0
-  TEST_DIR_TO_SKIP:             folder_to_skip
+  TEST_DIR_TO_SKIP:
+    - folder_to_skip
+    - largefiles_upload
 
   DOWNLOAD_TEST_LOCATION_SCP:   test_artifacts/scp_call
   DOWNLOAD_TEST_LOCATION_API:   test_artifacts/api_call

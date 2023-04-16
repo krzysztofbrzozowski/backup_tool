@@ -40,7 +40,7 @@ class ConfigManager:
         return config[cls.self_name]
 
     @classmethod
-    def get_config_value(cls, config_key: str = None):
+    def get_config_value(cls, config_key):
         """Reads YAML config with selected key"""
         try:
             return cls.get_config()[config_key]

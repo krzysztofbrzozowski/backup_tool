@@ -213,7 +213,7 @@ class TestFunctionalBackupTool:
     #     _, download_speed = FileManager.get(source_path=source, target_path=Config.get_config_value('TEST_FILE_TARGET_API'))
     #
     #     assert download_speed == expected_download_speed
-    #
+
     def test_skip_path_is_working_for_file_and_directory(self):
         """Verify if in downloaded folder skip path is omitted during downloading"""
         # Create source path
@@ -227,20 +227,23 @@ class TestFunctionalBackupTool:
             source_path
         )
 
-        test_file_to_skip = os.path.join(
+        skip_paths = list()
+        skip_paths.extend([os.path.join(
+            '/',
             source_path,
-            Config.get_config_value('TEST_FILE_TO_SKIP')
+            Config.get_config_value('TEST_FILE_TO_SKIP'))]
         )
 
-        test_folder_to_skip = os.path.join(
-            source_path,
-            Config.get_config_value('TEST_DIR_TO_SKIP')
-        )
+        # Extend skip path list with multiple paths provided in YAML file
+        skip_paths.extend([os.path.join('/', source_path, yaml_skip_path)
+                          for yaml_skip_path
+                          in Config.get_config_value('TEST_DIR_TO_SKIP')])
+
 
         # Tested method with skipping paths
         target_size, _ = FileManager.get(source_path=fr'/{source_path}',
                                          target_path=target_path_api,
-                                         skip_path=[fr'/{test_file_to_skip}', fr'/{test_folder_to_skip}'])
+                                         skip_path=skip_paths)
 
         # In test folder there are only 3 files, each 10MB, size in bytes
         expected_file_size = 30 * 1024 * 1024
@@ -355,7 +358,8 @@ class TestFunctionalBackupTool:
 
         # Not needed return values since comparison works on folder/file level base
         get_file_via_scp(source=fr'/{source_path_scp}', target=target_path_scp, recursive=True)
-        target_upload_size = os.stat(Path(target_path_scp)).st_size
+        directory = Path(target_path_scp)
+        target_upload_size = sum(f.stat().st_size for f in directory.glob('**/*') if f.is_file())
 
         # Expected random size x3 because 3 files created
         assert target_upload_size == 3 * expected_random_size
