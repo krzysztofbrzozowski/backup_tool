@@ -261,3 +261,52 @@ class TestFunctionalBackupTool:
     #     # TODO write the test for compressing downloaded backup
     #     assert True is False
     #
+
+    def test_uploaded_file_size_is_correct(self):
+        """Test is uploading created random file size, download it via SCP
+        and verifies downloaded file size equals uploaded"""
+        # Create source path
+        source_path = os.path.join(
+            BASE_DIR,
+            Config.get_config_value('TMP_DIR'),
+            Config.get_config_value('TEST_DIR_UPLOAD_SOURCE'),
+            Config.get_config_value('TEST_FILE_UPLOAD_1')
+        )
+        # Create upload path using API
+        target_path_api = os.path.join(
+            Config.get_config_value('TEST_DIR_SOURCE'),
+        )
+        # Create download path using API
+        source_path_api = os.path.join(
+            Config.get_config_value('TEST_DIR_SOURCE'),
+            Config.get_config_value('TEST_FILE_UPLOAD_1')
+        )
+        # Create download path using SCP
+        target_path_scp = os.path.join(
+            BASE_DIR,
+            Config.get_config_value('BACKUP_DIR'),
+            Config.get_config_value('DOWNLOAD_TEST_LOCATION_SCP'),
+            Config.get_config_value('TEST_FILE_UPLOAD_1')
+        )
+
+        # Create source path directory if not exists
+        if not os.path.exists(Path(source_path).parent):
+            os.makedirs(Path(source_path).parent, exist_ok=True)
+
+        # Create random size of file which is also expected one after download
+        # Multiply 1024 * 1024 to get size in bytes
+        import random
+        expected_random_size = random.randint(5, 10) * 1024 * 1024
+
+        # Create local file to upload
+        with open(source_path, 'wb') as file:
+            file.write(os.urandom(expected_random_size))
+
+        # Tested method
+        FileManager.put(source_path=source_path, target_path=fr'/{target_path_api}')
+
+        # Not needed return values since comparison works on folder/file level base
+        get_file_via_scp(source=fr'/{source_path_api}', target=target_path_scp, recursive=False)
+        target_upload_size = os.stat(Path(target_path_scp)).st_size
+
+        assert target_upload_size == expected_random_size

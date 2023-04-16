@@ -32,6 +32,36 @@ class FileManager(CommandManager):
             logging.error(e)
 
     @classmethod
+    def put(cls, source_path: str | List[str] = None, target_path: str = None, skip_path: str | List[str] = []):
+
+        # Change to list if one path is provided
+        if isinstance(source_path, str):
+            source_path = [source_path]
+
+        CommandManager.connect(use_pkey=True)
+
+        with SCPClient(transport=cls.ssh.get_transport(), progress=DisplayManager.progress) as scp:
+            try:
+                for source in source_path:
+                    if Path(source).is_dir():
+                        # Dict structure {'path/to/file': True | False (recursive)}
+                        _listdir = {os.path.join(source, file_name): file_name.is_dir()
+                                    # Get list of all files
+                                    for file_name in Path(source_path).glob("**/*")
+                                    if os.path.join(source, file_name) not in skip_path}
+
+                    elif Path(source).is_file():
+                        # Dict structure {'path/to/file': False (recursive)}
+                        _listdir = {source: False} if source not in skip_path else None
+                        _target_path = target_path
+
+                    for _source, _recursive in _listdir.items():
+                        scp.put(files=_source, remote_path=_target_path, recursive=_recursive)
+
+            except Exception as e:
+                logging.error(e)
+
+    @classmethod
     def get(cls, source_path: str | List[str] = None, target_path: str = None, skip_path: str | List[str] = []):
         """Download file or directory from server
         :param source_path:
@@ -78,7 +108,8 @@ class FileManager(CommandManager):
                         cls.create_dir(path=_target_path)
 
                     # If source is file, verify if not in skipped path
-                    else:
+                    elif stat.S_ISREG(_lstat.st_mode):
+                        # Dict structure {'path/to/file': False (recursive)}
                         _listdir = {source: False} if source not in skip_path else None
                         _target_path = target_path
                         cls.create_dir(path=Path(_target_path).parent)
