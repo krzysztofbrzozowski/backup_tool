@@ -50,35 +50,7 @@ You can use any IDE for testing but here is example how to set up everything usi
 
     <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/backup_toop_pubkey.png" alt="No message"/></a>
 
-
-Set up environment variable with path to your local copy of backup_tool.
-
-.. code-block:: console
-
-    # .zshrc
-    export BACKUP_TOOL_DIR="absolute/path/to/backup_tool"
-
-.. code-block:: console
-
-    source ~/.zshrc
-
-
-
-
-
-Generate SSH keys for test user and push it to your server. Set up key details in config_backup_tool.yaml.
-
-.. code-block:: yaml
-
-    # Test user for running tests
-    TEST_USER:
-      # Server details
-      HOST:       your_remote_test_host
-      USER:       your_remote_test_user
-
-      # Private key details
-      PKEY:       your_private_key_for_test
-      PASSPHRASE: your_private_key_passphrase_for_test
+* Setup tests
 
 Paths for tests are coded in config/config_backup_tool.yaml
 
@@ -114,33 +86,36 @@ Paths for tests are coded in config/config_backup_tool.yaml
     TEST_FILE_UPLOAD_1:           largefile_upload_1
     TEST_FILE_UPLOAD_2:           largefile_upload_2
 
-Run the tests
+    1. Setup test configuration
+    2. Setup working directory as main failder
+    3. Before lauch set up actions
+    4. Actions
 
-Prepare Dockerfile to mock your test server
+.. raw:: html
+
+    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/setup_test_actions.png" alt="No message"/></a>
+
+
+run_docker_compose
+
+.. raw:: html
+
+    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/run-docker-compose.png" alt="No message"/></a>
+
+bash - prepare private key -> prepare_server_test_files.sh your_pivate_key
+
+.. raw:: html
+
+    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/prepare-private-key.png" alt="No message"/></a>
+
+
+* Run tests either using console or GUI
 
 .. code-block:: console
 
     pytest -v tests/test_functional.py
 
-Current test output:
 
-.. code-block:: console
-
-    tests/test_functional.py::TestFunctionalBackupTool::test_connection_raises_exception_if_key_not_correct FAILED                                                          [ 12%]
-    tests/test_functional.py::TestFunctionalBackupTool::test_login_via_ssh_possible PASSED                                                                                  [ 25%]
-    tests/test_functional.py::TestFunctionalBackupTool::test_remote_commands_execution_working PASSED                                                                       [ 37%]
-    tests/test_functional.py::TestFunctionalBackupTool::test_downloaded_file_size_is_correct PASSED                                                                         [ 50%]
-    tests/test_functional.py::TestFunctionalBackupTool::test_downloaded_directory_size_is_correct PASSED                                                                    [ 62%]
-    tests/test_functional.py::TestFunctionalBackupTool::test_download_speed_is_correct FAILED                                                                               [ 75%]
-    tests/test_functional.py::TestFunctionalBackupTool::test_skip_path_is_working_for_directory PASSED                                                                      [ 87%]
-    tests/test_functional.py::TestFunctionalBackupTool::test_skip_path_is_working_for_file PASSED                                                                           [100%]
-
-Known issues:
-
-.. code-block:: console
-
-    tests/test_functional.py::TestFunctionalBackupTool::test_connection_raises_exception_if_key_not_correct FAILED
-    tests/test_functional.py::TestFunctionalBackupTool::test_download_speed_is_correct FAILED
 
 HOW TO USE TOOL
 ====
