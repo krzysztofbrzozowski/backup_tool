@@ -50,12 +50,10 @@ You can use any IDE for testing but here is example how to set up everything usi
 
     <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/backup_toop_pubkey.png" alt="No message"/></a>
 
-* Setup tests
-
-    * Setup test configuration [1]
-    * Setup working directory as main folder [2]
-    * Before launch set up actions [3]
-    * Actions [4]
+* Setup test configuration [1]
+* Setup working directory as main folder [2]
+* Before launch set up actions [3]
+* Actions [4]
 
 .. raw:: html
 
