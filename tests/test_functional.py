@@ -265,19 +265,19 @@ class TestFunctionalBackupTool:
     def test_uploaded_file_size_is_correct(self):
         """Test is uploading created random file size, download it via SCP
         and verifies downloaded file size equals uploaded"""
-        # Create source path
+        # Create source path for a file to upload
         source_path = os.path.join(
             BASE_DIR,
             Config.get_config_value('TMP_DIR'),
             Config.get_config_value('TEST_DIR_UPLOAD_SOURCE'),
             Config.get_config_value('TEST_FILE_UPLOAD_1')
         )
-        # Create upload path using API
+        # Create upload path using tested method (file will be stored here on a server)
         target_path_api = os.path.join(
             Config.get_config_value('TEST_DIR_SOURCE'),
         )
-        # Create download path using API
-        source_path_api = os.path.join(
+        # Create target (file to download) path using SCP
+        source_path_scp = os.path.join(
             Config.get_config_value('TEST_DIR_SOURCE'),
             Config.get_config_value('TEST_FILE_UPLOAD_1')
         )
@@ -306,7 +306,56 @@ class TestFunctionalBackupTool:
         FileManager.put(source_path=source_path, target_path=fr'/{target_path_api}')
 
         # Not needed return values since comparison works on folder/file level base
-        get_file_via_scp(source=fr'/{source_path_api}', target=target_path_scp, recursive=False)
+        get_file_via_scp(source=fr'/{source_path_scp}', target=target_path_scp, recursive=False)
         target_upload_size = os.stat(Path(target_path_scp)).st_size
 
         assert target_upload_size == expected_random_size
+
+    def test_uploaded_directory_size_is_correct(self):
+        """Test is uploading created random file size, download it via SCP
+        and verifies downloaded file size equals uploaded"""
+        # Create source path for a directory to upload
+        source_path = os.path.join(
+            BASE_DIR,
+            Config.get_config_value('TMP_DIR'),
+            Config.get_config_value('TEST_DIR_UPLOAD_SOURCE'),
+        )
+        # Create upload path using tested method (directory will be stored here on a server)
+        target_path_api = os.path.join(
+            Config.get_config_value('TEST_DIR_SOURCE'),
+        )
+        # Create target (directory to download) path using SCP
+        source_path_scp = os.path.join(
+            Config.get_config_value('TEST_DIR_SOURCE'),
+            Config.get_config_value('TEST_DIR_UPLOAD_SOURCE')
+        )
+        # Create download path using SCP
+        target_path_scp = os.path.join(
+            BASE_DIR,
+            Config.get_config_value('BACKUP_DIR'),
+            Config.get_config_value('DOWNLOAD_TEST_LOCATION_SCP'),
+        )
+
+        # Create source path directory if not exists
+        if not os.path.exists(Path(source_path).parent):
+            os.makedirs(Path(source_path).parent, exist_ok=True)
+
+        # Create random size of file which is also expected one after download
+        # Multiply 1024 * 1024 to get size in bytes
+        import random
+        expected_random_size = random.randint(5, 10) * 1024 * 1024
+
+        # Create local files to upload inside directory to upload
+        for file_to_upload in Config.get_config_values(['TEST_FILE_UPLOAD_0', 'TEST_FILE_UPLOAD_1', 'TEST_FILE_UPLOAD_2']):
+            with open(os.path.join(source_path, file_to_upload), 'wb') as file:
+                file.write(os.urandom(expected_random_size))
+
+        # Tested method
+        FileManager.put(source_path=source_path, target_path=fr'/{target_path_api}')
+
+        # Not needed return values since comparison works on folder/file level base
+        get_file_via_scp(source=fr'/{source_path_scp}', target=target_path_scp, recursive=True)
+        target_upload_size = os.stat(Path(target_path_scp)).st_size
+
+        # Expected random size x3 because 3 files created
+        assert target_upload_size == 3 * expected_random_size
