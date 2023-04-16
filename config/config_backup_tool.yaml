@@ -27,13 +27,13 @@ TEST_USER:
 
   ##################################
 
-  # Backup target path (relative - start from backup tool directory)
+  # Backup target path
   BACKUP_DIR:     backup.nosync
 
   # Test paths for recursive download (absolute)
   TEST_DIR_SOURCE:              largefiles
 
-  # Test paths for file download (relative)
+  # Test paths for file download
   TEST_FILE_0:                  largefile_0
   TEST_FILE_1:                  largefile_1
   TEST_FILE_2:                  largefile_2
@@ -49,7 +49,7 @@ TEST_USER:
   # temporary folder
   TMP_DIR:                      tmp
 
-  # Test path for recursive upload (relative)
+  # Test path for recursive upload
   TEST_DIR_UPLOAD_SOURCE:       largefiles_upload
 
   # Test paths for file upload

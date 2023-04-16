@@ -21,6 +21,36 @@ System requirements for for project:
 
 TESTING AFTER DOWNLOAD
 ====
+Currently all of the tests are written to run on port 2222 in docker image.
+After download repository you run all of your tests using docker image which is providing SSH/SCP server.
+You can use any IDE for testing but here is example how to set up everything using PyCharm.
+
+* Download and install Docker
+* Create virtual env and install requirements.txt
+
+.. code-block:: console
+
+    virtualenv venv
+    source source venv/bin/activate
+    pip install -r requirements.txt
+
+* Generate pair of SSH test keys
+
+.. code-block:: console
+
+    ssh-keygen -t ed25519 -C root
+    # display your public key
+    cat /place/to/store/sshkey/id_ed25519.pub
+    # display your private key
+    cat /place/to/store/sshkey/id_ed25519
+
+* Put your public key into Dockerfile
+
+.. raw:: html
+
+    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/backup_toop_pubkey.png" alt="No message"/></a>
+
+
 Set up environment variable with path to your local copy of backup_tool.
 
 .. code-block:: console
@@ -32,13 +62,9 @@ Set up environment variable with path to your local copy of backup_tool.
 
     source ~/.zshrc
 
-Create virtual env and install requirements.txt
 
-.. code-block:: console
 
-    virtualenv venv
-    source source venv/bin/activate
-    pip install -r requirements.txt
+
 
 Generate SSH keys for test user and push it to your server. Set up key details in config_backup_tool.yaml.
 
@@ -54,29 +80,39 @@ Generate SSH keys for test user and push it to your server. Set up key details i
       PKEY:       your_private_key_for_test
       PASSPHRASE: your_private_key_passphrase_for_test
 
-Set up paths for test files. No need to create files manually, those will be created automatically during tests.
+Paths for tests are coded in config/config_backup_tool.yaml
 
 .. code-block:: yaml
 
-    # Backup target path (absolute)
-    BACKUP_DIR: your_test_destination
-
-    # Test paths for file download (absolute)
-    TEST_FILE_0: your_test_source/largefiles/5M_largefile_0
-    TEST_FILE_1: your_test_source/largefiles/5M_largefile_1
-    TEST_FILE_2: your_test_source/largefiles/5M_largefile_2
-
-    TEST_FILE_TARGET_SCP: your_test_destination_for/scp_call/5M_largefile_0
-    TEST_FILE_TARGET_API: your_test_destination_for/api_call/5M_largefile_0
-
-    TEST_FILE_TO_SKIP: your_test_source/largefiles/5M_largefile_1
+    # Backup target path
+    BACKUP_DIR:     backup.nosync
 
     # Test paths for recursive download (absolute)
-    TEST_DIR_SOURCE: your_test_source/largefiles
-    TEST_DIR_TARGET_SCP: your_test_destination_for/scp_call
-    TEST_DIR_TARGET_API: your_test_destination_for/api_call
+    TEST_DIR_SOURCE:              largefiles
 
-    TEST_DIR_TO_SKIP: your_test_source/largefiles/folder_to_skip
+    # Test paths for file download
+    TEST_FILE_0:                  largefile_0
+    TEST_FILE_1:                  largefile_1
+    TEST_FILE_2:                  largefile_2
+
+    TEST_FILE_TO_SKIP:            file_to_skip_0
+    TEST_DIR_TO_SKIP:
+    - folder_to_skip
+    - largefiles_upload
+
+    DOWNLOAD_TEST_LOCATION_SCP:   test_artifacts/scp_call
+    DOWNLOAD_TEST_LOCATION_API:   test_artifacts/api_call
+
+    # temporary folder
+    TMP_DIR:                      tmp
+
+    # Test path for recursive upload
+    TEST_DIR_UPLOAD_SOURCE:       largefiles_upload
+
+    # Test paths for file upload
+    TEST_FILE_UPLOAD_0:           largefile_upload_0
+    TEST_FILE_UPLOAD_1:           largefile_upload_1
+    TEST_FILE_UPLOAD_2:           largefile_upload_2
 
 Run the tests
 
