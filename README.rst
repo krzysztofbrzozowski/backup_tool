@@ -1,3 +1,10 @@
+Current tests status
+====
+![tests](https://github.com/krzysztofbrzozowski/backup_tool//actions/workflows/tests.yaml/badge.svg)
+.. raw:: html
+
+    <a><img src="https://github.com/krzysztofbrzozowski/backup_tool//actions/workflows/tests.yaml/badge.svg" alt="No message"/></a>
+
 Tool for backup management
 ====
 
