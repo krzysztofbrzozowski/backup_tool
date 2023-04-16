@@ -52,23 +52,31 @@ You can use any IDE for testing but here is example how to set up everything usi
 
 * Setup tests
 
-    1. Setup test configuration
-    2. Setup working directory as main failder
-    3. Before lauch set up actions
-    4. Actions
+    - Setup test configuration
+    - Setup working directory as main folder
+    - Before launch set up actions
+    - Actions
 
 .. raw:: html
 
     <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/setup_test_actions.png" alt="No message"/></a>
 
 
-run_docker_compose
+run_docker_compose - prepare testing server. In argument provide
+
+.. code-block:: console
+
+    docker-compose --file .github/workflows/docker-files/docker-compose.yaml up -d
 
 .. raw:: html
 
     <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/run-docker-compose.png" alt="No message"/></a>
 
-bash - prepare private key -> prepare_server_test_files.sh your_pivate_key
+bash - prepare private SSH key. In argument provide
+
+.. code-block:: console
+
+    prepare_server_test_files.sh <your_pivate_key>
 
 .. raw:: html
 
