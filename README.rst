@@ -52,7 +52,37 @@ You can use any IDE for testing but here is example how to set up everything usi
 
 * Setup tests
 
-Paths for tests are coded in config/config_backup_tool.yaml
+    1. Setup test configuration
+    2. Setup working directory as main failder
+    3. Before lauch set up actions
+    4. Actions
+
+.. raw:: html
+
+    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/setup_test_actions.png" alt="No message"/></a>
+
+
+run_docker_compose
+
+.. raw:: html
+
+    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/run-docker-compose.png" alt="No message"/></a>
+
+bash - prepare private key -> prepare_server_test_files.sh your_pivate_key
+
+.. raw:: html
+
+    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/prepare-private-key.png" alt="No message"/></a>
+
+
+* Run tests either using console or GUI
+
+.. code-block:: console
+
+    pytest -v tests/test_functional.py
+
+
+Paths for tests are coded in config/config_backup_tool.yaml (no need to change them if you are running tests using Docker)
 
 .. code-block:: yaml
 
@@ -85,36 +115,6 @@ Paths for tests are coded in config/config_backup_tool.yaml
     TEST_FILE_UPLOAD_0:           largefile_upload_0
     TEST_FILE_UPLOAD_1:           largefile_upload_1
     TEST_FILE_UPLOAD_2:           largefile_upload_2
-
-    1. Setup test configuration
-    2. Setup working directory as main failder
-    3. Before lauch set up actions
-    4. Actions
-
-.. raw:: html
-
-    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/setup_test_actions.png" alt="No message"/></a>
-
-
-run_docker_compose
-
-.. raw:: html
-
-    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/run-docker-compose.png" alt="No message"/></a>
-
-bash - prepare private key -> prepare_server_test_files.sh your_pivate_key
-
-.. raw:: html
-
-    <a><img src="https://krzysztofbrzozowski.com/media/2023/04/16/prepare-private-key.png" alt="No message"/></a>
-
-
-* Run tests either using console or GUI
-
-.. code-block:: console
-
-    pytest -v tests/test_functional.py
-
 
 
 HOW TO USE TOOL
