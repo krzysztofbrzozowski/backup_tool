@@ -44,6 +44,9 @@ class FileManager(CommandManager):
         :return:
             Downloaded target size, average download speed
         """
+
+        logging.info(fr'Started DOWNLOADING {source_path} -> {target_path}')
+
         if not target_path:
             target_path = ConfigManager.get_config_value('BACKUP_DIR')
 
@@ -106,10 +109,24 @@ class FileManager(CommandManager):
         avg_download_speed = (target_size / (1024 * 1024)) / (time.time() - start_time)
         logging.info(f'{avg_download_speed:.2f}MB/s')
 
+        logging.info(fr'Finished DOWNLOADING {source_path} -> {target_path}')
+
         return target_size, avg_download_speed
 
     @classmethod
     def put(cls, source_path: str | List[str] = None, target_path: str = None, skip_path: str | List[str] = []):
+        """Upload file or directory to server
+
+        :param source_path:
+            Single or list of paths to upload to remote servet
+        :param target_path:
+            Destination path where files will be uploaded to
+        :param skip_path:
+            Single or list of paths inside folder to skip. NOT WORKING YET
+        :return:
+            None
+        """
+        logging.info(fr'Started UPLOADING {source_path} -> {target_path}')
 
         # Change to list if one path is provided
         if isinstance(source_path, str):
@@ -135,6 +152,7 @@ class FileManager(CommandManager):
             except Exception as e:
                 logging.error(e)
 
+        logging.info(fr'Finished UPLOADING {source_path} -> {target_path}')
 
     @classmethod
     def get_backup_positions(cls):
