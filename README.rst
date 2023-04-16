@@ -52,10 +52,10 @@ You can use any IDE for testing but here is example how to set up everything usi
 
 * Setup tests
 
-    - Setup test configuration
-    - Setup working directory as main folder
-    - Before launch set up actions
-    - Actions
+    * Setup test configuration [1]
+    * Setup working directory as main folder [2]
+    * Before launch set up actions [3]
+    * Actions [4]
 
 .. raw:: html
 
